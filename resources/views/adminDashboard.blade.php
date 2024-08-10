@@ -187,9 +187,11 @@
                             <li class="nav-item">
                                 <a class="nav-link active" href="/admin">Data Jadwal</a>
                             </li>
-                            {{-- <li class="nav-item">
-                                <a class="nav-link" href="/riwayatjadwal">Riwayat</a>
-                            </li> --}}
+                            @if (session('isAdmin') == 0)
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/riwayatjadwal">Riwayat</a>
+                                </li>
+                            @endif
                         </ul>
                     </div>
                 </li>
