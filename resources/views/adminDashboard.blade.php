@@ -79,22 +79,22 @@
         }
 
         .sidebar {
-        position: fixed;
-        top: 0;
-        left: 0;
-        height: 100%;
-        width: 240px;
-        background-color: #f8f9fa;
-        padding-top: 3rem;
-    }
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 240px;
+            background-color: #f8f9fa;
+            padding-top: 3rem;
+        }
 
-    .main-content {
-        margin-left: 240px;
-        padding: 20px;
-    }
+        .main-content {
+            margin-left: 240px;
+            padding: 20px;
+        }
 
-    /* Mobile view */
-    @media (max-width: 768px) {
+        /* Mobile view */
+        @media (max-width: 768px) {
             .sidebar {
                 width: 100%;
                 height: auto;
@@ -187,9 +187,9 @@
                             <li class="nav-item">
                                 <a class="nav-link active" href="/admin">Data Jadwal</a>
                             </li>
-                            <li class="nav-item">
+                            {{-- <li class="nav-item">
                                 <a class="nav-link" href="/riwayatjadwal">Riwayat</a>
-                            </li>
+                            </li> --}}
                         </ul>
                     </div>
                 </li>
@@ -274,7 +274,8 @@
                                                                 style="color: black; font-size: 20px;"></i>
                                                         </a>
                                                         <div class="modal fade"
-                                                            id="verticalycentered{{ $data->id_presensi }}" tabindex="-1">
+                                                            id="verticalycentered{{ $data->id_presensi }}"
+                                                            tabindex="-1">
                                                             <div class="modal-dialog modal-dialog-centered">
                                                                 <div class="modal-content">
                                                                     <div class="modal-header">
@@ -298,7 +299,8 @@
                                                                                 <div class="col-sm-10">
                                                                                     <input type="text"
                                                                                         class="form-control"
-                                                                                        name="event_name" id="inputText"
+                                                                                        name="event_name"
+                                                                                        id="inputText"
                                                                                         value="{{ $data->event_name }}"
                                                                                         required>
                                                                                 </div>
@@ -318,8 +320,8 @@
                                                                                 <div class="col-sm-10">
                                                                                     <input type="datetime-local"
                                                                                         class="form-control"
-                                                                                        name="time_start" id="start_date"
-                                                                                        required>
+                                                                                        name="time_start"
+                                                                                        id="start_date" required>
                                                                                 </div>
                                                                             </div>
                                                                             <div class="row mb-3">

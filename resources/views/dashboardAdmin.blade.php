@@ -91,7 +91,8 @@
             background-color: #f8f9fa;
             padding-top: 3rem;
             transition: transform 0.3s ease;
-            z-index: 1000; /* Ensure the sidebar is above other content */
+            z-index: 1000;
+            /* Ensure the sidebar is above other content */
         }
 
         .sidebar.hidden {
@@ -176,9 +177,9 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="/admin">Data Jadwal</a>
                             </li>
-                            <li class="nav-item">
+                            {{-- <li class="nav-item">
                                 <a class="nav-link" href="/riwayatjadwal">Riwayat</a>
-                            </li>
+                            </li> --}}
                         </ul>
                     </div>
                 </li>
@@ -197,8 +198,8 @@
         </div>
     </div>
 
-     <!-- Sidebar Toggle Button -->
-     <div class="toggle-sidebar" id="toggle-sidebar">
+    <!-- Sidebar Toggle Button -->
+    <div class="toggle-sidebar" id="toggle-sidebar">
         <i class="bi bi-list"></i>
     </div>
 
@@ -280,7 +281,8 @@
                         Grafik Jumlah Kegiatan per Organisasi
                     </div>
                     <div class="card-body">
-                        <canvas id="chartKegiatan" class="chartjs-render-monitor" width="400" height="300"></canvas>
+                        <canvas id="chartKegiatan" class="chartjs-render-monitor" width="400"
+                            height="300"></canvas>
                     </div>
                 </div>
 
@@ -304,7 +306,8 @@
                                 <select name="bulan" id="month-dropdown" class="form-control">
                                     <option value="">Pilih Bulan</option>
                                     @for ($i = 1; $i <= 12; $i++)
-                                        <option value="{{ $i }}">{{ date('F', mktime(0, 0, 0, $i, 1)) }}</option>
+                                        <option value="{{ $i }}">{{ date('F', mktime(0, 0, 0, $i, 1)) }}
+                                        </option>
                                     @endfor
                                 </select>
                             </div>

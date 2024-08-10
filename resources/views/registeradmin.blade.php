@@ -182,7 +182,8 @@
 
                                         <div class="col-12">
                                             <label for="yourPhone" class="form-label">No Handphone</label>
-                                            <input type="text" name="phone" class="form-control" id="yourPhone" required>
+                                            <input type="text" name="phone" class="form-control" id="yourPhone"
+                                                required>
                                             <div class="invalid-feedback">Masukkan No Handphone yang valid</div>
                                         </div>
                                         <div class="col-12">
@@ -208,7 +209,7 @@
     </div>
 
     <script>
-        document.getElementById('yourPhone').addEventListener('input', function (e) {
+        document.getElementById('yourPhone').addEventListener('input', function(e) {
             var value = e.target.value;
             e.target.value = value.replace(/\D/g, ''); // Menghapus semua karakter non-angka
         });

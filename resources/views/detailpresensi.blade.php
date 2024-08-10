@@ -38,7 +38,7 @@
   * Author: BootstrapMade.com
   * License: https://bootstrapmade.com/license/
   ======================================================== -->
-  <style>
+    <style>
         .sidebar {
             position: fixed;
             top: 0;
@@ -48,14 +48,16 @@
             background-color: #f8f9fa;
             padding-top: 3rem;
         }
+
         .main-content {
-            margin-left: 240px; /* Adjust with sidebar width */
+            margin-left: 240px;
+            /* Adjust with sidebar width */
             padding: 20px;
         }
+
         .sidebar .nav-link.active {
             background-color: #e9ecef;
         }
-
     </style>
 </head>
 
@@ -100,7 +102,8 @@
                     <a class="nav-link" href="/dashboardAdmin">Dashboard</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" data-bs-toggle="collapse" href="#jadwalSubMenu" role="button" aria-expanded="false" aria-controls="jadwalSubMenu">
+                    <a class="nav-link" data-bs-toggle="collapse" href="#jadwalSubMenu" role="button"
+                        aria-expanded="false" aria-controls="jadwalSubMenu">
                         Jadwal
                     </a>
                     <div class="collapse" id="jadwalSubMenu">
@@ -128,177 +131,183 @@
     </div>
 
     <div class="main-content">
-    <main class="p-5 mt-5">
+        <main class="p-5 mt-5">
 
-        <div class="pagetitle">
-            <h1>Data Tables</h1>
-            <nav>
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-                    <li class="breadcrumb-item">Tables</li>
-                    <li class="breadcrumb-item active">Data</li>
-                </ol>
-            </nav>
-        </div><!-- End Page Title -->
+            <div class="pagetitle">
+                <h1>Data Tables</h1>
+                <nav>
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                        <li class="breadcrumb-item">Tables</li>
+                        <li class="breadcrumb-item active">Data</li>
+                    </ol>
+                </nav>
+            </div><!-- End Page Title -->
 
-        <section class="section dashboard">
-            <div class="row">
-                <div class="col-xxl-1 col-md-6 d-flex justify-content-center align-items-center">
-                    <a href="/admin">
-                    <div class="card info-card sales-card py-4 px-4">
-                        <div class="card-icon rounded-circle d-flex align-items-center justify-content-center ">
-                            <i class="ri-home-4-line"></i>
-                        </div>
-
-
-                    </div>
-                    </a>
-                </div><!-- End Sales Card -->
-
-                <!-- Revenue Card -->
-                <div class="col-xxl-4 col-md-6">
-                    <div class="card info-card customers-card">
-                        <div class="card-body">
-                            <h5 class="card-title">Kode Presensi<span>|
-                                    {{ $detailPresensi->first()->event_name }}
-                                </span></h5>
-
-                            <div class="d-flex align-items-center">
-                                <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                                    <i class="ri-links-line"></i>
+            <section class="section dashboard">
+                <div class="row">
+                    <div class="col-xxl-1 col-md-6 d-flex justify-content-center align-items-center">
+                        <a href="/admin">
+                            <div class="card info-card sales-card py-4 px-4">
+                                <div class="card-icon rounded-circle d-flex align-items-center justify-content-center ">
+                                    <i class="ri-home-4-line"></i>
                                 </div>
-                                <h6 class="px-3"> {{ $detailPresensi->first()->kode_acak }}</h6>
-                                <div class="ps-3">
-                                </div>
+
+
                             </div>
-                        </div>
+                        </a>
+                    </div><!-- End Sales Card -->
 
-                    </div>
-                </div><!-- End Revenue Card -->
-                <div class="col-xxl-3 col-md-6">
-                    <div class="card info-card revenue-card">
-                        <div class="card-body">
-                            <h5 class="card-title">Jumlah <span>|Presensi Masuk</span></h5>
+                    <!-- Revenue Card -->
+                    <div class="col-xxl-4 col-md-6">
+                        <div class="card info-card customers-card">
+                            <div class="card-body">
+                                <h5 class="card-title">Kode Presensi<span>|
+                                        {{ $detailPresensi->first()->event_name }}
+                                    </span></h5>
 
-                            <div class="d-flex align-items-center">
-                                <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                                    <i class="ri-line-chart-line"></i>
-                                </div>
-                                <h6 class="px-4"> {{ $totalPresensi }}</h6>
-                                <div class="ps-3">
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                </div><!-- End Revenue Card -->
-
-                <!-- Customers Card -->
-                <div class="col-xxl-4 col-xl-12">
-
-                    <div class="card info-card sales-card">
-
-                        <div class="card-body">
-                            <h5 class="card-title">Sisa Waktu<span>| Presensi {{$detailPresensi->first()->status}} Ditutup</span></h5>
-
-                            <div class="d-flex align-items-center">
-                                <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                                    <i class="ri-folder-user-line"></i>
-                                </div>
-                                <div class="ps-3">
-                                    <h6>
-                                        @php
-                                            $currentTime = now();
-                                            $timeEnd = \Carbon\Carbon::parse($detailPresensi->first()->time_end);
-                                            $timeDifference = $currentTime->diff($timeEnd);
-
-                                            // Tentukan nilai default untuk setiap bagian waktu
-                                            $days = $timeDifference->days ?? 0;
-                                            $hours = $timeDifference->h ?? 0;
-                                            $minutes = $timeDifference->i ?? 0;
-
-                                            // Tampilkan selisih waktu
-                                            $differenceText = $days . ' hari, ' . $hours . ' jam, ' . $minutes . ' menit';
-
-                                            // Jika selisih waktu lebih besar dari nol, tambahkan warna merah
-                                            $style = $timeDifference->invert ? 'color: red;' : '';
-                                        @endphp
-                                        <span style="{{ $style }}">{{ $differenceText }}</span>
-                                    </h6>
-
-                                    {{-- <h6>{{$totalPresensi}}</h6> --}}
-
-
+                                <div class="d-flex align-items-center">
+                                    <div
+                                        class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                        <i class="ri-links-line"></i>
+                                    </div>
+                                    <h6 class="px-3"> {{ $detailPresensi->first()->kode_acak }}</h6>
+                                    <div class="ps-3">
+                                    </div>
                                 </div>
                             </div>
 
                         </div>
-                    </div>
+                    </div><!-- End Revenue Card -->
+                    <div class="col-xxl-3 col-md-6">
+                        <div class="card info-card revenue-card">
+                            <div class="card-body">
+                                <h5 class="card-title">Jumlah <span>|Presensi Masuk</span></h5>
 
-                </div><!-- End Customers Card -->
+                                <div class="d-flex align-items-center">
+                                    <div
+                                        class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                        <i class="ri-line-chart-line"></i>
+                                    </div>
+                                    <h6 class="px-4"> {{ $totalPresensi }}</h6>
+                                    <div class="ps-3">
+                                    </div>
+                                </div>
+                            </div>
 
-                <!-- Reports -->
-                <div class="col-12">
+                        </div>
+                    </div><!-- End Revenue Card -->
 
-                </div><!-- End Reports -->
+                    <!-- Customers Card -->
+                    <div class="col-xxl-4 col-xl-12">
 
-                <!-- Recent Sales -->
+                        <div class="card info-card sales-card">
 
-                <div class="col-lg-12">
+                            <div class="card-body">
+                                <h5 class="card-title">Sisa Waktu<span>| Presensi
+                                        {{ $detailPresensi->first()->status }} Ditutup</span></h5>
 
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">Data Presensi</h5>
+                                <div class="d-flex align-items-center">
+                                    <div
+                                        class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                        <i class="ri-folder-user-line"></i>
+                                    </div>
+                                    <div class="ps-3">
+                                        <h6>
+                                            @php
+                                                $currentTime = now();
+                                                $timeEnd = \Carbon\Carbon::parse($detailPresensi->first()->time_end);
+                                                $timeDifference = $currentTime->diff($timeEnd);
 
-                            <!-- Table with stripped rows -->
-                            <table class="table datatable">
-                                <thead>
-                                    <tr>
-                                        <th>Nama</th>
+                                                // Tentukan nilai default untuk setiap bagian waktu
+                                                $days = $timeDifference->days ?? 0;
+                                                $hours = $timeDifference->h ?? 0;
+                                                $minutes = $timeDifference->i ?? 0;
 
-                                        <th >Departemen</th>
-                                        <th >Email</th>
-                                        <th>Waktu Presensi</th>
-                                        <th>Aksi</th>
-                                    </tr>
-                                </thead>
+                                                // Tampilkan selisih waktu
+                                                $differenceText =
+                                                    $days . ' hari, ' . $hours . ' jam, ' . $minutes . ' menit';
 
-                                <tbody>
-                                    @foreach ($detailPresensi as $data)
+                                                // Jika selisih waktu lebih besar dari nol, tambahkan warna merah
+                                                $style = $timeDifference->invert ? 'color: red;' : '';
+                                            @endphp
+                                            <span style="{{ $style }}">{{ $differenceText }}</span>
+                                        </h6>
+
+                                        {{-- <h6>{{$totalPresensi}}</h6> --}}
+
+
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div><!-- End Customers Card -->
+
+                    <!-- Reports -->
+                    <div class="col-12">
+
+                    </div><!-- End Reports -->
+
+                    <!-- Recent Sales -->
+
+                    <div class="col-lg-12">
+
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Data Presensi</h5>
+
+                                <!-- Table with stripped rows -->
+                                <table class="table datatable">
+                                    <thead>
                                         <tr>
-                                            <td>{{ $data->name }}</td>
-                                            <td>{{ $data->departemen}}</td>
-                                            <td>{{  $data->email}}</td>
-                                            <td>{{ $data->absen }}</td>
+                                            <th>Nama</th>
 
-                                            <td>
-
-                                                <a type="button" class="px-2 delete-presensi"
-                                                    data-presensi-id="{{ $data->id_detail}}">
-                                                    <i class="bi bi-trash" style="color: black; font-size: 20px;"></i>
-                                                </a>
-
-
-
-
-                                            </td>
+                                            <th>Departemen</th>
+                                            <th>Email</th>
+                                            <th>Waktu Presensi</th>
+                                            <th>Aksi</th>
                                         </tr>
-                                    @endforeach
-                                </tbody>
+                                    </thead>
 
-                            </table>
-                            <!-- End Table with stripped rows -->
+                                    <tbody>
+                                        @foreach ($detailPresensi as $data)
+                                            <tr>
+                                                <td>{{ $data->name }}</td>
+                                                <td>{{ $data->departemen }}</td>
+                                                <td>{{ $data->email }}</td>
+                                                <td>{{ $data->absen }}</td>
 
+                                                <td>
+
+                                                    <a type="button" class="px-2 delete-presensi"
+                                                        data-presensi-id="{{ $data->id_detail }}">
+                                                        <i class="bi bi-trash"
+                                                            style="color: black; font-size: 20px;"></i>
+                                                    </a>
+
+
+
+
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+
+                                </table>
+                                <!-- End Table with stripped rows -->
+
+                            </div>
                         </div>
+
                     </div>
-
                 </div>
-            </div>
 
 
-        </section>
+            </section>
 
-    </main><!-- End #main -->
+        </main><!-- End #main -->
     </div>
 
     <!-- ======= Footer ======= -->

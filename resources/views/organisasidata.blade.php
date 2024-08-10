@@ -188,9 +188,9 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="/admin">Data Jadwal</a>
                             </li>
-                            <li class="nav-item">
+                            {{-- <li class="nav-item">
                                 <a class="nav-link" href="/riwayatjadwal">Riwayat</a>
-                            </li>
+                            </li> --}}
                         </ul>
                     </div>
                 </li>
