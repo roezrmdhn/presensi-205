@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
-use App\Http\Controllers\SekretarisController;
+use App\Http\Controllers\Detail_PresensiController;
 use App\Http\Controllers\OrganisasiController;
 use App\Http\Controllers\PresensiController;
 use App\Http\Controllers\RegisterController;
@@ -34,13 +34,13 @@ Route::get('/dashboardAdmin', [DashboardAdminController::class, 'dashboardAdmin'
 // Route::get('/history', function () {
 //     return view('riwayat');
 // });
-Route::get('/user', [SekretarisController::class, 'getAllDetailPresensi'])->name('detail-presensi.index');
-Route::get('/detail-presensi/{idPresensi}', [SekretarisController::class, 'getDetailPresensi'])->name('detail.presensi');
+Route::get('/user', [Detail_PresensiController::class, 'getAllDetailPresensi'])->name('detail-presensi.index');
+Route::get('/detail-presensi/{idPresensi}', [Detail_PresensiController::class, 'getDetailPresensi'])->name('detail.presensi');
 
-Route::get('/absensi/{kode_acak}', [SekretarisController::class, 'store'])->name('absensi.submit');
+Route::get('/absensi/{kode_acak}', [Detail_PresensiController::class, 'store'])->name('absensi.submit');
 
 Route::post('/update-presensi/{id}', [PresensiController::class, 'updatePresensi'])->name('update.presensi');
-Route::get('/delete-detail/{id}', [SekretarisController::class, 'deleteDetailPresensi'])->name('delete.detail.presensi');
+Route::get('/delete-detail/{id}', [Detail_PresensiController::class, 'deleteDetailPresensi'])->name('delete.detail.presensi');
 Route::get('/redirect', [AnggotaController::class, 'redirectToProfile'])->name('redirect.to.profile');
 Route::post('/admin/update', [AdminController::class, 'update'])->name('admin.update');
 Route::post('/update-password', [AdminController::class, 'updatepass'])->name('update.password');

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Organisasi;
-use App\Models\Sekretaris;
+use App\Models\Detail_Presensi;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
@@ -68,11 +68,11 @@ class DashboardAdminController extends Controller
         $organisasi_id = request('organisasi_id', $organisasi->first()->id);
         $bulan = request('bulan', date('n'));
 
-        $jumlah_absensi_per_minggu = DB::table('sekretaris')
-            ->join('presensi', 'sekretaris.id_presensi', '=', 'presensi.id_presensi')
+        $jumlah_absensi_per_minggu = DB::table('detail_presensi')
+            ->join('presensi', 'detail_presensi.id_presensi', '=', 'presensi.id_presensi')
             ->where('presensi.id_organisasi', $organisasi_id)
             ->whereMonth('presensi.time_start', $bulan)
-            ->selectRaw('WEEK(sekretaris.created_at) - WEEK(DATE_SUB(sekretaris.created_at, INTERVAL DAYOFMONTH(sekretaris.created_at)-1 DAY)) + 1 as minggu, count(distinct sekretaris.id_anggota) as jumlah_anggota')
+            ->selectRaw('WEEK(detail_presensi.created_at) - WEEK(DATE_SUB(detail_presensi.created_at, INTERVAL DAYOFMONTH(detail_presensi.created_at)-1 DAY)) + 1 as minggu, count(distinct detail_presensi.id_anggota) as jumlah_anggota')
             ->groupBy('minggu')
             ->get();
 
@@ -117,12 +117,12 @@ class DashboardAdminController extends Controller
         // Ambil nama organisasi
         $organisasi = Organisasi::find($organisasi_id);
 
-        // Query untuk menghitung jumlah sekretaris per minggu
-        $jumlah_absensi_per_minggu = DB::table('sekretaris')
-            ->join('presensi', 'sekretaris.id_presensi', '=', 'presensi.id_presensi')
+        // Query untuk menghitung jumlah detail_presensi per minggu
+        $jumlah_absensi_per_minggu = DB::table('detail_presensi')
+            ->join('presensi', 'detail_presensi.id_presensi', '=', 'presensi.id_presensi')
             ->where('presensi.id_organisasi', $organisasi_id)
             ->whereMonth('presensi.time_start', $bulan)
-            ->selectRaw('WEEK(sekretaris.created_at) - WEEK(DATE_SUB(sekretaris.created_at, INTERVAL DAYOFMONTH(sekretaris.created_at)-1 DAY)) + 1 as minggu, count(distinct sekretaris.id_anggota) as jumlah_anggota')
+            ->selectRaw('WEEK(detail_presensi.created_at) - WEEK(DATE_SUB(detail_presensi.created_at, INTERVAL DAYOFMONTH(detail_presensi.created_at)-1 DAY)) + 1 as minggu, count(distinct detail_presensi.id_anggota) as jumlah_anggota')
             ->groupBy('minggu')
             ->get();
 

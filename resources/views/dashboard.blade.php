@@ -165,11 +165,11 @@
                                                     </thead>
                                                     <tbody>
                                                         @foreach ($dataPresensi as $presensi)
-                                                            @foreach ($presensi->sekretaris as $sekretaris)
+                                                            @foreach ($presensi->detail_presensi as $detail_presensi)
                                                                 <tr>
                                                                     <td>{{ $presensi->kode_acak }}</td>
-                                                                    <td>{{ \Carbon\Carbon::parse($sekretaris->jam_presensi)->format('H:i:s') }}</td>
-                                                                    <td>{{ $sekretaris->tanggal_presensi }}</td>
+                                                                    <td>{{ \Carbon\Carbon::parse($detail_presensi->jam_presensi)->format('H:i:s') }}</td>
+                                                                    <td>{{ $detail_presensi->tanggal_presensi }}</td>
                                                                     <td>{{ $presensi->event_name }}</td>
                                                                     <td>
                                                                         @if ($presensi->nama_organisasi === 'Semua Organisasi')

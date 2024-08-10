@@ -11,7 +11,13 @@ class Presensi extends Model
     protected $primaryKey = 'id_presensi';
 
     protected $fillable = [
-        'kode_acak', 'id_admin', 'time_start', 'time_end', 'event_name', 'description', 'id_organisasi'
+        'kode_acak',
+        'id_admin',
+        'time_start',
+        'time_end',
+        'event_name',
+        'description',
+        'id_organisasi'
     ];
 
     // Jika diperlukan, definisikan relasi ke admin di sini
@@ -21,14 +27,14 @@ class Presensi extends Model
     }
 
     // Jika diperlukan, definisikan relasi ke detail presensi di sini
-    public function detailSekretaris()
+    public function detailDetail_Presensi()
     {
-        return $this->hasMany(Sekretaris::class);
+        return $this->hasMany(Detail_Presensi::class);
     }
 
-    public function sekretaris()
+    public function detail_presensi()
     {
-        return $this->hasMany(Sekretaris::class, 'id_presensi');
+        return $this->hasMany(Detail_Presensi::class, 'id_presensi');
     }
 
     public function organisasi()

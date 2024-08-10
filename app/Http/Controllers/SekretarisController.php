@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Sekretaris;
+use App\Models\Detail_Presensi;
 use App\Models\Presensi;
 use App\Models\Organisasi;
 use App\Models\Anggota;
@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
-class SekretarisController extends Controller
+class Detail_PresensiController extends Controller
 {
 
     public function getAllDetailPresensi()
@@ -23,10 +23,10 @@ class SekretarisController extends Controller
         $userId = session('id'); // Sesuaikan dengan key sesi yang Anda gunakan
 
         // Ambil semua data detail presensi yang terkait dengan id_anggota dari session
-        $dataPresensi = Presensi::whereHas('sekretaris', function ($query) use ($userId) {
+        $dataPresensi = Presensi::whereHas('detail_presensi', function ($query) use ($userId) {
             $query->where('id_anggota', $userId); // Filter berdasarkan id_anggota yang sesuai dengan userId
         })
-            ->with(['sekretaris' => function ($query) {
+            ->with(['detail_presensi' => function ($query) {
                 $query->where('id_anggota', session('id')) // Filter berdasarkan session id
                     ->select(
                         'id_presensi',
@@ -56,13 +56,13 @@ class SekretarisController extends Controller
             return redirect()->route('login');
         }
         // Get detail presensi berdasarkan id presensi
-        $detailPresensi = Sekretaris::where('id_presensi', $idPresensi)
-            ->join('presensi', 'sekretaris.id_presensi', '=', 'presensi.id_presensi')
-            ->join('anggota', 'sekretaris.id_anggota', '=', 'anggota.id_anggota')
-            ->select('sekretaris.*', 'sekretaris.updated_at as absen', 'sekretaris.id as id_detail', 'presensi.*', 'anggota.*')
+        $detailPresensi = Detail_Presensi::where('id_presensi', $idPresensi)
+            ->join('presensi', 'detail_presensi.id_presensi', '=', 'presensi.id_presensi')
+            ->join('anggota', 'detail_presensi.id_anggota', '=', 'anggota.id_anggota')
+            ->select('detail_presensi.*', 'detail_presensi.updated_at as absen', 'detail_presensi.id as id_detail', 'presensi.*', 'anggota.*')
             ->get();
 
-        $totalPresensi = Sekretaris::where('id_presensi', $idPresensi)->count();
+        $totalPresensi = Detail_Presensi::where('id_presensi', $idPresensi)->count();
 
         if ($detailPresensi->isEmpty()) {
             $kosong = true;
@@ -79,7 +79,7 @@ class SekretarisController extends Controller
             return redirect()->route('login');
         }
         // Cari data detail presensi berdasarkan ID
-        $detailPresensi = Sekretaris::find($id);
+        $detailPresensi = Detail_Presensi::find($id);
 
         // Jika data tidak ditemukan, kembalikan response error
         if (!$detailPresensi) {
@@ -90,7 +90,7 @@ class SekretarisController extends Controller
         $detailPresensi->delete();
 
         // Periksa apakah setelah penghapusan data, jumlah data detail presensi menjadi kosong
-        $totalDetailPresensi = Sekretaris::count();
+        $totalDetailPresensi = Detail_Presensi::count();
         if ($totalDetailPresensi === 0) {
             $detail = true;
             // Jika kosong, arahkan ke route /admin
@@ -158,7 +158,7 @@ class SekretarisController extends Controller
         }
 
         // Periksa apakah anggota sudah melakukan presensi
-        $userPresensi = Sekretaris::where('id_presensi', $presensi->id_presensi)
+        $userPresensi = Detail_Presensi::where('id_presensi', $presensi->id_presensi)
             ->where('id_anggota', $userId)
             ->exists();
 
@@ -169,7 +169,7 @@ class SekretarisController extends Controller
         }
 
         // Simpan presensi baru
-        $detailPresensi = new Sekretaris();
+        $detailPresensi = new Detail_Presensi();
         $detailPresensi->id_presensi = $presensi->id_presensi; // Mengisi id_presensi dengan benar
         $detailPresensi->id_anggota = $userId;
         $detailPresensi->created_at = Carbon::now('Asia/Jakarta');

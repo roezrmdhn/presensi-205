@@ -4,13 +4,14 @@ namespace App\Models; // Tambahkan namespace yang sesuai
 
 use Illuminate\Database\Eloquent\Model;
 
-class Sekretaris extends Model
+class Detail_Presensi extends Model
 {
 
-    protected $table = 'sekretaris';
-    protected $primaryKey = 'id_sekretaris';
+    protected $table = 'detail_presensi';
+    protected $primaryKey = 'id_detail_presensi';
     protected $fillable = [
-        'presensi_id', 'anggota_id',
+        'presensi_id',
+        'anggota_id',
     ];
 
     // Jika diperlukan, definisikan relasi ke presensi di sini

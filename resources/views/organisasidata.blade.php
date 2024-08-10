@@ -299,19 +299,21 @@
                                                                                 <label for="inputFoto"
                                                                                     class="col-sm-2 col-form-label">Foto</label>
                                                                                 <div class="col-sm-10">
-                                                                                    <img src="{{ $data->foto ? asset($data->foto) : '' }}"
+                                                                                    <img src="{{ $data->foto }}"
                                                                                         alt="" width="70">
                                                                                     <input type="file"
                                                                                         class="form-control"
                                                                                         name="foto" id="inputFoto"
                                                                                         value="{{ $data->foto }}">
-                                                                                    <div class="modal-footer">
-                                                                                        <button type="button"
-                                                                                            class="btn btn-secondary"
-                                                                                            data-bs-dismiss="modal">Batal</button>
-                                                                                        <button type="submit"
-                                                                                            class="btn btn-primary">Simpan</button>
-                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="modal-footer">
+                                                                                <button type="button"
+                                                                                    class="btn btn-secondary"
+                                                                                    data-bs-dismiss="modal">Batal</button>
+                                                                                <button type="submit"
+                                                                                    class="btn btn-primary">Simpan</button>
+                                                                            </div>
                                                                         </form>
                                                                     </div>
                                                                 </div>
@@ -330,7 +332,6 @@
                                                                     style="color: black; font-size: 20px;"></i>
                                                             </a>
                                                         </form>
-
                                                     </td>
                                                 </tr>
                                             @endforeach

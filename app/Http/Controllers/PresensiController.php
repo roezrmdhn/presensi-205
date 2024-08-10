@@ -119,8 +119,8 @@ class PresensiController extends Controller
             return redirect()->back()->with('error', 'Data presensi tidak ditemukan.');
         }
 
-        // Hapus data terkait di tabel sekretaris terlebih dahulu
-        DB::table('sekretaris')->where('id_presensi', $id)->delete();
+        // Hapus data terkait di tabel detail_presensi terlebih dahulu
+        DB::table('detail_presensi')->where('id_presensi', $id)->delete();
 
         // Hapus data presensi
         $presensi->delete();
@@ -327,8 +327,8 @@ class PresensiController extends Controller
         $startDate = date('Y-m-d', strtotime($startDate));
 
         // Query untuk mengambil kode_acak dari presensi
-        $kode_acak = DB::table('sekretaris')
-            ->join('presensi', 'sekretaris.id_presensi', '=', 'presensi.id_presensi')
+        $kode_acak = DB::table('detail_presensi')
+            ->join('presensi', 'detail_presensi.id_presensi', '=', 'presensi.id_presensi')
             ->select('presensi.kode_acak', 'presensi.id_presensi')
             ->where('presensi.id_organisasi', $organisasi_id)
             ->whereDate('presensi.time_start', '<=', $startDate)
@@ -342,11 +342,11 @@ class PresensiController extends Controller
             return view('riwayat', compact('data', 'riwayatjadwal', 'presensiData', 'belumCount', 'selesaiCount', 'totalPresensi', 'belumPercentage', 'selesaiPercentage'))->with('warning', true);
         }
 
-        // Mengambil data sekretaris berdasarkan kode_acak yang ditemukan
-        $data = DB::table('sekretaris')
-            ->join('anggota', 'sekretaris.id_anggota', '=', 'anggota.id_anggota')
-            ->select('anggota.name', 'anggota.jabatan', 'anggota.departemen', 'anggota.phone', 'sekretaris.created_at as waktu_presensi')
-            ->where('sekretaris.id_presensi', $kode_acak->id_presensi) // Menggunakan id_presensi dari $kode_acak
+        // Mengambil data detail_presensi berdasarkan kode_acak yang ditemukan
+        $data = DB::table('detail_presensi')
+            ->join('anggota', 'detail_presensi.id_anggota', '=', 'anggota.id_anggota')
+            ->select('anggota.name', 'anggota.jabatan', 'anggota.departemen', 'anggota.phone', 'detail_presensi.created_at as waktu_presensi')
+            ->where('detail_presensi.id_presensi', $kode_acak->id_presensi) // Menggunakan id_presensi dari $kode_acak
             ->get();
 
         if ($data->isEmpty()) {
@@ -354,8 +354,8 @@ class PresensiController extends Controller
         }
 
         // Query to count absent members
-        $countAbsen = DB::table('sekretaris')
-            ->join('presensi', 'sekretaris.id_presensi', '=', 'presensi.id_presensi')
+        $countAbsen = DB::table('detail_presensi')
+            ->join('presensi', 'detail_presensi.id_presensi', '=', 'presensi.id_presensi')
             ->select('presensi.kode_acak', 'presensi.id_presensi')
             ->where('presensi.id_organisasi', $organisasi_id)
             ->whereDate('presensi.time_start', '<=', $startDate)
