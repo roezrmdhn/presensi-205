@@ -9,7 +9,9 @@ class Organisasi extends Model
     protected $table = 'organisasi';
     protected $primaryKey = 'id_organisasi';
     protected $fillable = [
-        'nama', 'deskripsi',
+        'nama',
+        'deskripsi',
+        'foto',
     ];
 
     public function presensi()

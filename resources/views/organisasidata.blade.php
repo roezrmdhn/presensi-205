@@ -79,22 +79,22 @@
         }
 
         .sidebar {
-        position: fixed;
-        top: 0;
-        left: 0;
-        height: 100%;
-        width: 240px;
-        background-color: #f8f9fa;
-        padding-top: 3rem;
-    }
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 240px;
+            background-color: #f8f9fa;
+            padding-top: 3rem;
+        }
 
-    .main-content {
-        margin-left: 240px;
-        padding: 20px;
-    }
+        .main-content {
+            margin-left: 240px;
+            padding: 20px;
+        }
 
-    /* Mobile view */
-    @media (max-width: 768px) {
+        /* Mobile view */
+        @media (max-width: 768px) {
             .sidebar {
                 width: 100%;
                 height: auto;
@@ -238,15 +238,19 @@
                                     <table class="table datatable">
                                         <thead>
                                             <tr>
+                                                <th>Foto</th>
                                                 <th>Nama</th>
                                                 <th>Deskripsi</th>
                                                 <th>Aksi</th>
                                             </tr>
                                         </thead>
-
                                         <tbody>
                                             @foreach ($user as $data)
                                                 <tr>
+                                                    <td><img src="{{ $data->foto ? asset($data->foto) : 'https://via.placeholder.com/70x70/a8d5e2/fff?text=Organisasi' }}"
+                                                            alt="Profile" class="rounded-circle bordered-circle"
+                                                            width="70">
+                                                    </td>
                                                     <td>{{ $data->nama }}</td>
                                                     <td>{{ $data->deskripsi }}</td>
                                                     <td>
@@ -270,7 +274,8 @@
                                                                         <!-- Formulir -->
                                                                         <form
                                                                             action="{{ route('update.organisasi', ['id' => $data->id_organisasi]) }}"
-                                                                            method="POST">
+                                                                            method="POST"
+                                                                            enctype="multipart/form-data">
                                                                             @csrf
                                                                             <div class="row mb-3">
                                                                                 <label for="nama"
@@ -290,13 +295,23 @@
                                                                                     <textarea class="form-control" name="deskripsi" id="deskripsi" required>{{ $data->deskripsi }}</textarea>
                                                                                 </div>
                                                                             </div>
-                                                                            <div class="modal-footer">
-                                                                                <button type="button"
-                                                                                    class="btn btn-secondary"
-                                                                                    data-bs-dismiss="modal">Batal</button>
-                                                                                <button type="submit"
-                                                                                    class="btn btn-primary">Simpan</button>
-                                                                            </div>
+                                                                            <div class="row mb-3">
+                                                                                <label for="inputFoto"
+                                                                                    class="col-sm-2 col-form-label">Foto</label>
+                                                                                <div class="col-sm-10">
+                                                                                    <img src="{{ $data->foto ? asset($data->foto) : '' }}"
+                                                                                        alt="" width="70">
+                                                                                    <input type="file"
+                                                                                        class="form-control"
+                                                                                        name="foto" id="inputFoto"
+                                                                                        value="{{ $data->foto }}">
+                                                                                    <div class="modal-footer">
+                                                                                        <button type="button"
+                                                                                            class="btn btn-secondary"
+                                                                                            data-bs-dismiss="modal">Batal</button>
+                                                                                        <button type="submit"
+                                                                                            class="btn btn-primary">Simpan</button>
+                                                                                    </div>
                                                                         </form>
                                                                     </div>
                                                                 </div>
@@ -350,7 +365,8 @@
                                 aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <form action="{{ route('organisasi.store') }}" method="POST">
+                            <form action="{{ route('organisasi.store') }}" method="POST"
+                                enctype="multipart/form-data">
                                 @csrf
                                 <div class="row mb-3">
                                     <label for="inputText" class="col-sm-2 col-form-label">Nama</label>
@@ -363,6 +379,12 @@
                                     <label for="inputText" class="col-sm-2 col-form-label">Deskripsi</label>
                                     <div class="col-sm-10">
                                         <textarea type="text" class="form-control" name="deskripsi" id="inputText" required></textarea>
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <label for="inputFoto" class="col-sm-2 col-form-label">Foto</label>
+                                    <div class="col-sm-10">
+                                        <input type="file" class="form-control" name="foto" id="inputFoto">
                                     </div>
                                 </div>
                                 <div class="modal-footer">
