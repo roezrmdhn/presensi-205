@@ -79,22 +79,22 @@
         }
 
         .sidebar {
-        position: fixed;
-        top: 0;
-        left: 0;
-        height: 100%;
-        width: 240px;
-        background-color: #f8f9fa;
-        padding-top: 3rem;
-    }
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 240px;
+            background-color: #f8f9fa;
+            padding-top: 3rem;
+        }
 
-    .main-content {
-        margin-left: 240px;
-        padding: 20px;
-    }
+        .main-content {
+            margin-left: 240px;
+            padding: 20px;
+        }
 
-    /* Mobile view */
-    @media (max-width: 768px) {
+        /* Mobile view */
+        @media (max-width: 768px) {
             .sidebar {
                 width: 100%;
                 height: auto;
@@ -213,9 +213,9 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="/admin">Data Jadwal</a>
                             </li>
-                            <li class="nav-item">
+                            {{-- <li class="nav-item">
                                 <a class="nav-link" href="/riwayatjadwal">Riwayat</a>
-                            </li>
+                            </li> --}}
                         </ul>
                     </div>
                 </li>
@@ -234,10 +234,10 @@
         </div>
     </div>
 
-         <!-- Sidebar Toggle Button -->
-         <div class="toggle-sidebar" id="toggle-sidebar">
-            <i class="bi bi-list"></i>
-        </div>
+    <!-- Sidebar Toggle Button -->
+    <div class="toggle-sidebar" id="toggle-sidebar">
+        <i class="bi bi-list"></i>
+    </div>
 
     <div class="main-content">
         <main class="p-5 mt-5">
@@ -299,7 +299,8 @@
                                                 <td>
                                                     <a type="button" data-bs-toggle="modal"
                                                         data-bs-target="#verticalycentered{{ $data->id_admin }}">
-                                                        <i class="bi bi-pencil" style="color: black; font-size: 20px;"></i>
+                                                        <i class="bi bi-pencil"
+                                                            style="color: black; font-size: 20px;"></i>
                                                     </a>
                                                     <div class="modal fade" id="verticalycentered{{ $data->id_admin }}"
                                                         tabindex="-1">
@@ -325,8 +326,10 @@
                                                                                 class="col-md-4 col-lg-3 col-form-label">Nama</label>
                                                                             <div class="col-md-8 col-lg-9">
                                                                                 <input name="name" type="text"
-                                                                                    class="form-control" id="name"
-                                                                                    value="{{ $data->name }}" required>
+                                                                                    class="form-control"
+                                                                                    id="name"
+                                                                                    value="{{ $data->name }}"
+                                                                                    required>
                                                                             </div>
                                                                         </div>
 
@@ -336,8 +339,10 @@
                                                                                 class="col-md-4 col-lg-3 col-form-label">jabatan</label>
                                                                             <div class="col-md-8 col-lg-9">
                                                                                 <input name="jabatan" type="text"
-                                                                                    class="form-control" id="jabatan"
-                                                                                    value="{{ $data->jabatan }}" required>
+                                                                                    class="form-control"
+                                                                                    id="jabatan"
+                                                                                    value="{{ $data->jabatan }}"
+                                                                                    required>
                                                                             </div>
                                                                         </div>
 
@@ -370,8 +375,10 @@
                                                                                 class="col-md-4 col-lg-3 col-form-label">Alamat</label>
                                                                             <div class="col-md-8 col-lg-9">
                                                                                 <input name="address" type="text"
-                                                                                    class="form-control" id="address"
-                                                                                    value="{{ $data->address }}" required>
+                                                                                    class="form-control"
+                                                                                    id="address"
+                                                                                    value="{{ $data->address }}"
+                                                                                    required>
                                                                             </div>
                                                                         </div>
 
@@ -382,8 +389,10 @@
                                                                                 Telepon</label>
                                                                             <div class="col-md-8 col-lg-9">
                                                                                 <input name="phone" type="text"
-                                                                                    class="form-control" id="phone"
-                                                                                    value="{{ $data->phone }}" required>
+                                                                                    class="form-control"
+                                                                                    id="phone"
+                                                                                    value="{{ $data->phone }}"
+                                                                                    required>
                                                                             </div>
                                                                         </div>
 
@@ -393,8 +402,10 @@
                                                                                 class="col-md-4 col-lg-3 col-form-label">Email</label>
                                                                             <div class="col-md-8 col-lg-9">
                                                                                 <input name="email" type="email"
-                                                                                    class="form-control" id="email"
-                                                                                    value="{{ $data->email }}" required>
+                                                                                    class="form-control"
+                                                                                    id="email"
+                                                                                    value="{{ $data->email }}"
+                                                                                    required>
                                                                             </div>
                                                                         </div>
 

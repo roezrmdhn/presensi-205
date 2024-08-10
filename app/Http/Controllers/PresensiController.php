@@ -274,12 +274,12 @@ class PresensiController extends Controller
 
     public function cetak(Request $request)
     {
-        $organisasi_id = $request->input('organisasi_id');
+        // $organisasi_id = $request->input('organisasi_id');
         $startDate = $request->input('start_date');
 
         // Validasi input
         $request->validate([
-            'organisasi_id' => 'required|exists:organisasi,id_organisasi',
+            // 'organisasi_id' => 'required|exists:organisasi,id_organisasi',
             'start_date' => 'required',
         ]);
 
@@ -291,7 +291,7 @@ class PresensiController extends Controller
 
         // Get id_admin from session
         $adminId = session('id');
-
+        $organisasi_id = session('idOrganisasiTersimpan');
         // Update presensi status to 'Selesai' for presensi with 'time_end' in the past
         Presensi::where('id_admin', $adminId)
             ->where('status', 'Belum')

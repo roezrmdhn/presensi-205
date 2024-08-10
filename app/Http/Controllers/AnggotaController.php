@@ -201,6 +201,7 @@ class AnggotaController extends Controller
             session(['id' => $admin->id_admin]);
             session(['isAdmin' => $admin->isAdmin]);
             session(['foto' => $admin->foto ?: 'assets/img/profile-img.jpg']);
+            session(['idOrganisasiTersimpan' => $admin->id_organisasi]);
             session(['level' => "admin"]);
             return redirect('/dashboardAdmin'); // Redirect ke halaman dashboard admin
         }
@@ -211,6 +212,7 @@ class AnggotaController extends Controller
             session(['name' => $admin->name]);
             session(['id' => $admin->id_admin]);
             session(['foto' => $admin->foto ?: 'assets/img/profile-img.jpg']);
+            session(['idOrganisasiTersimpan' => $admin->id_organisasi]);
             session(['level' => "admin"]);
             // dd( password_verify($credentials['password'], $admin->password));
 

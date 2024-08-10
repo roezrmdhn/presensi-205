@@ -22,6 +22,7 @@ class Detail_PresensiController extends Controller
         // Dapatkan id_anggota dari session
         $userId = session('id'); // Sesuaikan dengan key sesi yang Anda gunakan
 
+
         // Ambil semua data detail presensi yang terkait dengan id_anggota dari session
         $dataPresensi = Presensi::whereHas('detail_presensi', function ($query) use ($userId) {
             $query->where('id_anggota', $userId); // Filter berdasarkan id_anggota yang sesuai dengan userId

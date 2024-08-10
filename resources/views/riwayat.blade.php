@@ -282,7 +282,7 @@
                                                                 <label for="organization-select"
                                                                     class="form-label">Organisasi</label>
                                                             </div>
-                                                            <div
+                                                            {{-- <div
                                                                 class="col-lg-9 d-flex justify-content-center align-items-center">
                                                                 <select class="form-select" id="organization-select"
                                                                     name="organisasi_id">
@@ -293,7 +293,25 @@
                                                                             {{ $organisasi->nama }}</option>
                                                                     @endforeach
                                                                 </select>
+                                                            </div> --}}
+                                                            <div
+                                                                class="col-lg-9 d-flex justify-content-center align-items-center">
+                                                                <input type="number" class="form-control"
+                                                                    name="organisasi_id"
+                                                                    value="{{ session('idOrganisasiTersimpan') }}"
+                                                                    disabled>
                                                             </div>
+                                                            {{-- <div class="col-lg-9 d-flex justify-content-center align-items-center">
+                                                                <select class="form-select" id="organization-select" name="organisasi_id" disabled>
+                                                                    @foreach ($riwayatjadwal as $organisasi)
+                                                                        <option value="{{ $organisasi->id_organisasi }}" 
+                                                                            {{ session('idOrganisasiTersimpan') == $organisasi->id_organisasi ? 'selected' : '' }}>
+                                                                            {{ $organisasi->nama }}
+                                                                        </option>
+                                                                    @endforeach
+                                                                </select>
+                                                            </div> --}}
+
                                                         </div>
                                                     </div>
 
