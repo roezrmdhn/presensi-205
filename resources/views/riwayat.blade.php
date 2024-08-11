@@ -193,16 +193,11 @@
         <div class="px-3">
             <h3 class="fw-bold">Menu</h3>
             <ul class="nav flex-column">
-                @if (session('role') == 1)
-                    <li class="nav-item">
-                        <a class="nav-link" href="/dashboardAdmin">Dashboard</a>
-                    </li>
-                @endif
-                @if (session('role') == 0)
-                    <li class="nav-item">
-                        <a class="nav-link" href="/riwayatjadwal">Dashboard</a>
-                    </li>
-                @endif
+
+                <li class="nav-item">
+                    <a class="nav-link" href="/dashboardAdmin">Dashboard</a>
+                </li>
+
                 <li class="nav-item">
                     <a class="nav-link" data-bs-toggle="collapse" href="#jadwalSubMenu" role="button"
                         aria-expanded="false" aria-controls="jadwalSubMenu">
@@ -210,11 +205,11 @@
                     </a>
                     <div class="collapse" id="jadwalSubMenu">
                         <ul class="nav flex-column ms-3">
-                            @if (session('role') == 1)
-                                <li class="nav-item">
-                                    <a class="nav-link" href="/admin">Data Jadwal</a>
-                                </li>
-                            @endif
+
+                            <li class="nav-item">
+                                <a class="nav-link" href="/admin">Data Jadwal</a>
+                            </li>
+
                             <li class="nav-item">
                                 <a class="nav-link active" href="/riwayatjadwal">Riwayat</a>
                             </li>
@@ -268,8 +263,10 @@
                             <div class="card-body">
                                 <h5 class="card-title">Data Riwayat</h5>
                                 <!-- Table with stripped rows -->
-                                <button type="button" data-bs-toggle="modal" data-bs-target="#verticalycentered"
-                                    class="btn btn-primary">Cetak Riwayat</button>
+                                @if (session('role') == 0)
+                                    <button type="button" data-bs-toggle="modal" data-bs-target="#verticalycentered"
+                                        class="btn btn-primary">Cetak Riwayat</button>
+                                @endif
                                 <div class="modal fade" id="verticalycentered" tabindex="-1">
                                     <div class="modal-dialog modal-dialog-centered">
                                         <div class="modal-content">
@@ -385,11 +382,11 @@
                                                     <td>{{ $data->description }}</td>
                                                     <td>{{ $data->nama_organisasi }}</td>
                                                     <td>
-                                                        <a type="button" class="px-2 delete-presensi"
+                                                        {{-- <a type="button" class="px-2 delete-presensi"
                                                             data-presensi-id="{{ $data->id_presensi }}">
                                                             <i class="bi bi-trash"
                                                                 style="color: black; font-size: 20px;"></i>
-                                                        </a>
+                                                        </a> --}}
                                                     </td>
                                                 </tr>
                                             @endforeach

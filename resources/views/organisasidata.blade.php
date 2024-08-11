@@ -190,11 +190,9 @@
                                     <a class="nav-link" href="/admin">Data Jadwal</a>
                                 </li>
                             @endif
-                            @if (session('role') == 0)
-                                <li class="nav-item">
-                                    <a class="nav-link" href="/riwayatjadwal">Riwayat</a>
-                                </li>
-                            @endif
+                            <li class="nav-item">
+                                <a class="nav-link" href="/riwayatjadwal">Riwayat</a>
+                            </li>
                         </ul>
                     </div>
                 </li>
