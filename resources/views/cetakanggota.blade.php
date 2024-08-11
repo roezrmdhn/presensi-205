@@ -72,7 +72,7 @@
     <div class="container">
         <div class="header">
             <div>
-                <h1>Cetak Daftar Presensi</h1>
+                <h1>Cetak Daftar Presensi {{ $organisasi->nama }}</h1>
                 {{-- <h4>{{ $organisasi->nama }}</h4> --}}
                 {{-- <h4>{{ $organisasi->id_organisasi }}</h4> --}}
             </div>
