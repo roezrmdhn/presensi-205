@@ -282,18 +282,6 @@
                                                                 <label for="organization-select"
                                                                     class="form-label">Organisasi</label>
                                                             </div>
-                                                            {{-- <div
-                                                                class="col-lg-9 d-flex justify-content-center align-items-center">
-                                                                <select class="form-select" id="organization-select"
-                                                                    name="organisasi_id">
-                                                                    <option selected>Pilih Organisasi</option>
-                                                                    @foreach ($riwayatjadwal as $organisasi)
-                                                                        <option
-                                                                            value="{{ $organisasi->id_organisasi }}">
-                                                                            {{ $organisasi->nama }}</option>
-                                                                    @endforeach
-                                                                </select>
-                                                            </div> --}}
                                                             <div
                                                                 class="col-lg-9 d-flex justify-content-center align-items-center">
                                                                 <input type="number" class="form-control"
@@ -301,17 +289,6 @@
                                                                     value="{{ session('idOrganisasiTersimpan') }}"
                                                                     disabled>
                                                             </div>
-                                                            {{-- <div class="col-lg-9 d-flex justify-content-center align-items-center">
-                                                                <select class="form-select" id="organization-select" name="organisasi_id" disabled>
-                                                                    @foreach ($riwayatjadwal as $organisasi)
-                                                                        <option value="{{ $organisasi->id_organisasi }}" 
-                                                                            {{ session('idOrganisasiTersimpan') == $organisasi->id_organisasi ? 'selected' : '' }}>
-                                                                            {{ $organisasi->nama }}
-                                                                        </option>
-                                                                    @endforeach
-                                                                </select>
-                                                            </div> --}}
-
                                                         </div>
                                                     </div>
 
@@ -328,6 +305,35 @@
                                                                 class="col-lg-9 d-flex justify-content-center align-items-center">
                                                                 <input type="date" class="form-control"
                                                                     id="start-date" name="start_date">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="container mb-4"
+                                                        style="border-radius: 5px; width: 70%; background-color: rgb(249, 250, 251); box-shadow: 0px 2px 20px rgba(3, 41, 112, 0.1);">
+                                                        <div class="row">
+                                                            <div
+                                                                class="col-lg-3 d-flex justify-content-center align-items-center">
+                                                                <label for="event-name"
+                                                                    class="form-label">Kegiatan</label>
+                                                            </div>
+                                                            <div
+                                                                class="col-lg-9 d-flex justify-content-center align-items-center">
+                                                                <select class="form-select" id="event-name"
+                                                                    name="event_name">
+                                                                    <option selected value="" disabled>Pilih
+                                                                        Kegiatan
+                                                                    </option>
+                                                                    @if ($eventNames && $eventNames->isNotEmpty())
+                                                                        @foreach ($eventNames as $event)
+                                                                            <option value="{{ $event->event_name }}">
+                                                                                {{ $event->event_name }}</option>
+                                                                        @endforeach
+                                                                    @else
+                                                                        <option value="" disabled>Event tidak
+                                                                            tersedia</option>
+                                                                    @endif
+
+                                                                </select>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -402,7 +408,11 @@
     <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
             class="bi bi-arrow-up-short"></i></a>
 
-
+    @if (session('error'))
+        <script>
+            alert("{{ session('error') }}");
+        </script>
+    @endif
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
     <script>

@@ -241,81 +241,65 @@ class PresensiController extends Controller
             ->where('status', 'Belum')
             ->where('time_end', '<', Carbon::now())
             ->update(['status' => 'Selesai']);
+
         $belumCount = Presensi::where('id_admin', $adminId)
             ->where('status', 'Belum')
             ->count();
 
-        // Count the number of presensi with status 'Selesai' for the admin
         $selesaiCount = Presensi::where('id_admin', $adminId)
             ->where('status', 'Selesai')
             ->count();
 
-        // Count the total number of presensi for the admin
         $totalPresensi = Presensi::where('id_admin', $adminId)->count();
 
-        // Calculate the percentage of presensi 'Belum' from total
         $belumPercentage = $totalPresensi > 0 ? ($belumCount / $totalPresensi) * 100 : 0;
-
-        // Calculate the percentage of presensi 'Selesai' from total
         $selesaiPercentage = $totalPresensi > 0 ? ($selesaiCount / $totalPresensi) * 100 : 0;
-        // Retrieve all presensi data for the admin
 
         $presensiData = Presensi::join('organisasi', 'presensi.id_organisasi', '=', 'organisasi.id_organisasi')
             ->where('presensi.id_admin', $adminId)
-            ->where('id_admin', $adminId)->where('status', 'Selesai')
+            ->where('status', 'Selesai')
             ->orderBy('presensi.id_presensi', 'desc')
             ->select('presensi.*', 'organisasi.nama as nama_organisasi')
             ->get();
 
+        // Ambil semua event_name dari tabel presensi
+        $eventNames = Presensi::select('event_name')->distinct()->get();
+
         $riwayatjadwal = Organisasi::all();
-        // Return the presensi data
-        return view('riwayat', compact('riwayatjadwal', 'presensiData', 'belumCount', 'selesaiCount', 'totalPresensi', 'belumPercentage', 'selesaiPercentage'));
+
+        return view('riwayat', compact('riwayatjadwal', 'presensiData', 'belumCount', 'selesaiCount', 'totalPresensi', 'belumPercentage', 'selesaiPercentage', 'eventNames'));
     }
+
 
     public function cetak(Request $request)
     {
-        // $organisasi_id = $request->input('organisasi_id');
         $startDate = $request->input('start_date');
+        $eventName = $request->input('event_name');
 
         // Validasi input
         $request->validate([
-            // 'organisasi_id' => 'required|exists:organisasi,id_organisasi',
             'start_date' => 'required',
+            'event_name' => 'required|string'
         ]);
 
         // Check if admin id exists in session
         if (!session('id')) {
-            // Redirect to login page if admin id is empty
             return redirect('/login');
         }
 
         // Get id_admin from session
         $adminId = session('id');
         $organisasi_id = session('idOrganisasiTersimpan');
+
         // Update presensi status to 'Selesai' for presensi with 'time_end' in the past
         Presensi::where('id_admin', $adminId)
             ->where('status', 'Belum')
             ->where('time_end', '<', Carbon::now())
             ->update(['status' => 'Selesai']);
-        $belumCount = Presensi::where('id_admin', $adminId)
-            ->where('status', 'Belum')
-            ->count();
 
-        // Count the number of presensi with status 'Selesai' for the admin
-        $selesaiCount = Presensi::where('id_admin', $adminId)
+        $presensiData = Presensi::where('id_admin', $adminId)
             ->where('status', 'Selesai')
-            ->count();
-
-        // Count the total number of presensi for the admin
-        $totalPresensi = Presensi::where('id_admin', $adminId)->count();
-
-        // Calculate the percentage of presensi 'Belum' from total
-        $belumPercentage = $totalPresensi > 0 ? ($belumCount / $totalPresensi) * 100 : 0;
-
-        // Calculate the percentage of presensi 'Selesai' from total
-        $selesaiPercentage = $totalPresensi > 0 ? ($selesaiCount / $totalPresensi) * 100 : 0;
-        // Retrieve all presensi data for the admin
-        $presensiData = Presensi::where('id_admin', $adminId)->where('status', 'Selesai')
+            ->where('event_name', $eventName)
             ->orderBy('id_presensi', 'desc')
             ->get();
 
@@ -323,44 +307,42 @@ class PresensiController extends Controller
         $organisasi = Organisasi::find($organisasi_id);
         $riwayatjadwal = Organisasi::all();
 
-        // Ubah format tanggal jika diperlukan, misal dari 'd/m/Y' ke 'Y-m-d'
         $startDate = date('Y-m-d', strtotime($startDate));
 
-        // Query untuk mengambil kode_acak dari presensi
+        // Query untuk mengambil kode_acak dan event_name dari presensi
         $kode_acak = DB::table('detail_presensi')
             ->join('presensi', 'detail_presensi.id_presensi', '=', 'presensi.id_presensi')
-            ->select('presensi.kode_acak', 'presensi.id_presensi')
+            ->select('presensi.kode_acak', 'presensi.event_name', 'presensi.id_presensi')
             ->where('presensi.id_organisasi', $organisasi_id)
+            ->where('presensi.event_name', $eventName) // Tambahkan filter event_name
             ->whereDate('presensi.time_start', '<=', $startDate)
-            ->first(); // Mengambil hanya satu baris pertama
+            ->first();
 
-        // Jika kode_acak tidak ditemukan, tampilkan pesan bahwa data tidak ditemukan
         if (!$kode_acak) {
-            $data = []; // Atau $data = null; tergantung bagaimana Anda menangani data di view
+            $data = [];
 
-            // Redirect atau tampilkan view dengan pesan bahwa data tidak ditemukan
-            return view('riwayat', compact('data', 'riwayatjadwal', 'presensiData', 'belumCount', 'selesaiCount', 'totalPresensi', 'belumPercentage', 'selesaiPercentage'))->with('warning', true);
+            return view('riwayat', compact('data', 'riwayatjadwal', 'presensiData'))->with('warning', true);
         }
 
-        // Mengambil data detail_presensi berdasarkan kode_acak yang ditemukan
         $data = DB::table('detail_presensi')
             ->join('anggota', 'detail_presensi.id_anggota', '=', 'anggota.id_anggota')
             ->select('anggota.name', 'anggota.jabatan', 'anggota.departemen', 'anggota.phone', 'detail_presensi.created_at as waktu_presensi')
-            ->where('detail_presensi.id_presensi', $kode_acak->id_presensi) // Menggunakan id_presensi dari $kode_acak
+            ->where('detail_presensi.id_presensi', $kode_acak->id_presensi)
             ->get();
 
         if ($data->isEmpty()) {
-            return view('riwayat', compact('data', 'riwayatjadwal', 'presensiData', 'belumCount', 'selesaiCount', 'totalPresensi', 'belumPercentage', 'selesaiPercentage'))->with('warning', true);
+            return view('riwayat', compact('data', 'riwayatjadwal', 'presensiData'))->with('warning', true);
         }
 
-        // Query to count absent members
         $countAbsen = DB::table('detail_presensi')
             ->join('presensi', 'detail_presensi.id_presensi', '=', 'presensi.id_presensi')
-            ->select('presensi.kode_acak', 'presensi.id_presensi')
             ->where('presensi.id_organisasi', $organisasi_id)
+            ->where('presensi.event_name', $eventName) // Tambahkan filter event_name
             ->whereDate('presensi.time_start', '<=', $startDate)
             ->count();
 
-        return view('cetakanggota', compact('organisasi', 'countAbsen', 'kode_acak', 'data'));
+        $event_name = $kode_acak->event_name;
+
+        return view('cetakanggota', compact('organisasi', 'countAbsen', 'kode_acak', 'data', 'event_name'));
     }
 }
