@@ -11,8 +11,8 @@ class Anggota extends Authenticatable implements MustVerifyEmail
 {
     use HasFactory, Notifiable;
 
-    protected $table = 'anggota';
-    protected $primaryKey = 'id_anggota';
+    protected $table = 'users';
+    protected $primaryKey = 'id_users';
 
     /**
      * The attributes that are mass assignable.
@@ -20,7 +20,14 @@ class Anggota extends Authenticatable implements MustVerifyEmail
      * @var array
      */
     protected $fillable = [
-        'name', 'jabatan', 'departemen', 'address', 'phone', 'email', 'password', 'foto'
+        'name',
+        'jabatan',
+        'departemen',
+        'address',
+        'phone',
+        'email',
+        'password',
+        'foto'
     ];
 
     /**
@@ -29,7 +36,8 @@ class Anggota extends Authenticatable implements MustVerifyEmail
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token',
+        'password',
+        'remember_token',
     ];
 
     /**

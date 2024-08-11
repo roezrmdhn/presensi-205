@@ -177,7 +177,7 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="/admin">Data Jadwal</a>
                             </li>
-                            @if (session('isAdmin') == 0)
+                            @if (session('role') == 0)
                                 <li class="nav-item">
                                     <a class="nav-link" href="/riwayatjadwal">Riwayat</a>
                                 </li>
@@ -185,7 +185,7 @@
                         </ul>
                     </div>
                 </li>
-                @if (session('isAdmin') == 1)
+                @if (session('role') == 1)
                     <li class="nav-item">
                         <a class="nav-link" href="/organisasi">Organisasi</a>
                     </li>

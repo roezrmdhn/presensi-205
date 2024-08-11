@@ -77,14 +77,25 @@
                 <div class="col-lg-1"></div>
                 <div class="col-xxl-1 col-md-6 ml-4">
                     <section class="section dashboard">
-                        <a href="/user">
-                            <div class="card info-card sales-card py-4 px-4">
-                                <div class="card-icon rounded-circle d-flex align-items-center justify-content-center ">
-                                    <i class="ri-home-4-line"></i>
+                        @if (session('role') == 0)
+                            <a href="/riwayatjadwal">
+                                <div class="card info-card sales-card py-4 px-4">
+                                    <div
+                                        class="card-icon rounded-circle d-flex align-items-center justify-content-center ">
+                                        <i class="ri-home-4-line"></i>
+                                    </div>
                                 </div>
-                            </div>
-                        </a>
-
+                            </a>
+                        @elseif (session('role') == 2)
+                            <a href="/user">
+                                <div class="card info-card sales-card py-4 px-4">
+                                    <div
+                                        class="card-icon rounded-circle d-flex align-items-center justify-content-center ">
+                                        <i class="ri-home-4-line"></i>
+                                    </div>
+                                </div>
+                            </a>
+                        @endif
                 </div>
 
 
@@ -121,6 +132,7 @@
                                     <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
 
                                         <img src="{{ $user->foto }}" alt="Profile" class="rounded-circle">
+                                        {{-- <p>A{{ $user->foto }}</p> --}}
                                         <h2>{{ $user->name }}</h2>
                                         <h3>{{ $user->email }}</h3>
 
@@ -131,8 +143,7 @@
                                 <div class="tab-pane fade profile-edit pt-3" id="profile-edit">
 
                                     <!-- Profile Edit Form -->
-                                    <form method="post"
-                                        action="{{ route('user.update', ['id' => $user->id_anggota]) }}"
+                                    <form method="post" action="{{ route('user.update', ['id' => $user->id_users]) }}"
                                         enctype="multipart/form-data">
                                         @csrf
                                         <!-- Input untuk foto profil -->

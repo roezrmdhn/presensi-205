@@ -187,7 +187,7 @@
                             <li class="nav-item">
                                 <a class="nav-link active" href="/admin">Data Jadwal</a>
                             </li>
-                            @if (session('isAdmin') == 0)
+                            @if (session('role') == 0)
                                 <li class="nav-item">
                                     <a class="nav-link" href="/riwayatjadwal">Riwayat</a>
                                 </li>
@@ -195,7 +195,7 @@
                         </ul>
                     </div>
                 </li>
-                @if (session('isAdmin') == 1)
+                @if (session('role') == 1)
                     <li class="nav-item">
                         <a class="nav-link" href="/organisasi">Organisasi</a>
                     </li>
@@ -463,7 +463,7 @@
                                             <option value="" disabled selected>Pilih Organisasi</option>
                                             @foreach ($organisasi as $org)
                                                 @if ($org->id_organisasi == 0)
-                                                    @if (session('isAdmin') == 1)
+                                                    @if (session('role') == 1)
                                                         <option value="{{ $org->id_organisasi }}">{{ $org->nama }}
                                                         </option>
                                                     @endif

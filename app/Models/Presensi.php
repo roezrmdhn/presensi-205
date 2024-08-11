@@ -12,7 +12,7 @@ class Presensi extends Model
 
     protected $fillable = [
         'kode_acak',
-        'id_admin',
+        'id_users',
         'time_start',
         'time_end',
         'event_name',
@@ -23,7 +23,7 @@ class Presensi extends Model
     // Jika diperlukan, definisikan relasi ke admin di sini
     public function admin()
     {
-        return $this->belongsTo(Admin::class);
+        return $this->belongsTo(Users::class);
     }
 
     // Jika diperlukan, definisikan relasi ke detail presensi di sini

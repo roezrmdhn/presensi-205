@@ -185,24 +185,30 @@
                     </a>
                     <div class="collapse" id="jadwalSubMenu">
                         <ul class="nav flex-column ms-3">
-                            <li class="nav-item">
-                                <a class="nav-link" href="/admin">Data Jadwal</a>
-                            </li>
-                            {{-- <li class="nav-item">
-                                <a class="nav-link" href="/riwayatjadwal">Riwayat</a>
-                            </li> --}}
+                            @if (session('role') == 1)
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/admin">Data Jadwal</a>
+                                </li>
+                            @endif
+                            @if (session('role') == 0)
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/riwayatjadwal">Riwayat</a>
+                                </li>
+                            @endif
                         </ul>
                     </div>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link active" href="/organisasi">Organisasi</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/userdata">Anggota</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/admindata">Admin/Sekretaris</a>
-                </li>
+                @if (session('role') == 1)
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/organisasi">Organisasi</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/userdata">Anggota</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admindata">Admin/Sekretaris</a>
+                    </li>
+                @endif
             </ul>
         </div>
     </div>

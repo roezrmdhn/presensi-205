@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Detail_Presensi;
 use App\Models\Presensi;
 use App\Models\Organisasi;
+use App\Models\Users;
 use App\Models\Anggota;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
@@ -19,16 +20,16 @@ class Detail_PresensiController extends Controller
             // Redirect to login page if admin id is empty
             return redirect()->route('login');
         }
-        // Dapatkan id_anggota dari session
+        // Dapatkan id_users dari session
         $userId = session('id'); // Sesuaikan dengan key sesi yang Anda gunakan
 
 
-        // Ambil semua data detail presensi yang terkait dengan id_anggota dari session
+        // Ambil semua data detail presensi yang terkait dengan id_users dari session
         $dataPresensi = Presensi::whereHas('detail_presensi', function ($query) use ($userId) {
-            $query->where('id_anggota', $userId); // Filter berdasarkan id_anggota yang sesuai dengan userId
+            $query->where('id_users', $userId); // Filter berdasarkan id_users yang sesuai dengan userId
         })
             ->with(['detail_presensi' => function ($query) {
-                $query->where('id_anggota', session('id')) // Filter berdasarkan session id
+                $query->where('id_users', session('id')) // Filter berdasarkan session id
                     ->select(
                         'id_presensi',
                         DB::raw('DATE(created_at) as tanggal_presensi'),
@@ -59,8 +60,8 @@ class Detail_PresensiController extends Controller
         // Get detail presensi berdasarkan id presensi
         $detailPresensi = Detail_Presensi::where('id_presensi', $idPresensi)
             ->join('presensi', 'detail_presensi.id_presensi', '=', 'presensi.id_presensi')
-            ->join('anggota', 'detail_presensi.id_anggota', '=', 'anggota.id_anggota')
-            ->select('detail_presensi.*', 'detail_presensi.updated_at as absen', 'detail_presensi.id as id_detail', 'presensi.*', 'anggota.*')
+            ->join('users', 'detail_presensi.id_users', '=', 'users.id_users')
+            ->select('detail_presensi.*', 'detail_presensi.updated_at as absen', 'detail_presensi.id as id_detail', 'presensi.*', 'users.*')
             ->get();
 
         $totalPresensi = Detail_Presensi::where('id_presensi', $idPresensi)->count();
@@ -147,7 +148,7 @@ class Detail_PresensiController extends Controller
         $userId = session('id'); // Sesuaikan dengan key sesi yang Anda gunakan
 
         // Dapatkan data anggota berdasarkan id anggota
-        $anggota = Anggota::find($userId);
+        $anggota = Users::find($userId);
 
         // Dapatkan id organisasi berdasarkan nama departemen anggota
         $organisasi = Organisasi::where('nama', $anggota->departemen)->first();
@@ -160,7 +161,7 @@ class Detail_PresensiController extends Controller
 
         // Periksa apakah anggota sudah melakukan presensi
         $userPresensi = Detail_Presensi::where('id_presensi', $presensi->id_presensi)
-            ->where('id_anggota', $userId)
+            ->where('id_users', $userId)
             ->exists();
 
         if ($userPresensi) {
@@ -172,7 +173,7 @@ class Detail_PresensiController extends Controller
         // Simpan presensi baru
         $detailPresensi = new Detail_Presensi();
         $detailPresensi->id_presensi = $presensi->id_presensi; // Mengisi id_presensi dengan benar
-        $detailPresensi->id_anggota = $userId;
+        $detailPresensi->id_users = $userId;
         $detailPresensi->created_at = Carbon::now('Asia/Jakarta');
         $detailPresensi->save();
 

@@ -19,29 +19,29 @@ class DashboardAdminController extends Controller
             return redirect()->route('login');
         }
 
-        // Get id_admin from session
+        // Get id_users from session
         $adminId = session('id');
 
         // Update presensi status to 'Selesai' for presensi with 'time_end' in the past
-        Presensi::where('id_admin', $adminId)
+        Presensi::where('id_users', $adminId)
             ->where('status', 'Belum')
             ->where('time_end', '<', Carbon::now())
             ->update(['status' => 'Selesai']);
 
         // Count the number of presensi with status 'Belum' for the admin
-        $belumCount = Presensi::where('id_admin', $adminId)
+        $belumCount = Presensi::where('id_users', $adminId)
             ->where('status', 'Belum')
             ->count();
 
         // Count the number of presensi with status 'Selesai' for the admin
-        $selesaiCount = Presensi::where('id_admin', $adminId)
+        $selesaiCount = Presensi::where('id_users', $adminId)
             ->where('status', 'Selesai')
             ->count();
 
         // Count the total number of presensi for the admin
-        $totalPresensi = Presensi::where('id_admin', $adminId)->count();
+        $totalPresensi = Presensi::where('id_users', $adminId)->count();
         $organisasi = Organisasi::all();
-        // $admin = Admin::where('id_admin', $id)->firstOrFail();
+        // $admin = Users::where('id_users', $id)->firstOrFail();
 
         // Calculate the percentage of presensi 'Belum' from total
         $belumPercentage = $totalPresensi > 0 ? ($belumCount / $totalPresensi) * 100 : 0;
@@ -53,7 +53,7 @@ class DashboardAdminController extends Controller
 
         // Retrieve all presensi data for the admin with status 'Belum'
         $presensiData = Presensi::join('organisasi', 'presensi.id_organisasi', '=', 'organisasi.id_organisasi')
-            ->where('presensi.id_admin', $adminId)
+            ->where('presensi.id_users', $adminId)
             ->where('presensi.status', 'Belum')
             ->orderBy('presensi.id_presensi', 'desc')
             ->select('presensi.*', 'organisasi.nama as nama_organisasi')
@@ -72,7 +72,7 @@ class DashboardAdminController extends Controller
             ->join('presensi', 'detail_presensi.id_presensi', '=', 'presensi.id_presensi')
             ->where('presensi.id_organisasi', $organisasi_id)
             ->whereMonth('presensi.time_start', $bulan)
-            ->selectRaw('WEEK(detail_presensi.created_at) - WEEK(DATE_SUB(detail_presensi.created_at, INTERVAL DAYOFMONTH(detail_presensi.created_at)-1 DAY)) + 1 as minggu, count(distinct detail_presensi.id_anggota) as jumlah_anggota')
+            ->selectRaw('WEEK(detail_presensi.created_at) - WEEK(DATE_SUB(detail_presensi.created_at, INTERVAL DAYOFMONTH(detail_presensi.created_at)-1 DAY)) + 1 as minggu, count(distinct detail_presensi.id_users) as jumlah_anggota')
             ->groupBy('minggu')
             ->get();
 
@@ -122,7 +122,7 @@ class DashboardAdminController extends Controller
             ->join('presensi', 'detail_presensi.id_presensi', '=', 'presensi.id_presensi')
             ->where('presensi.id_organisasi', $organisasi_id)
             ->whereMonth('presensi.time_start', $bulan)
-            ->selectRaw('WEEK(detail_presensi.created_at) - WEEK(DATE_SUB(detail_presensi.created_at, INTERVAL DAYOFMONTH(detail_presensi.created_at)-1 DAY)) + 1 as minggu, count(distinct detail_presensi.id_anggota) as jumlah_anggota')
+            ->selectRaw('WEEK(detail_presensi.created_at) - WEEK(DATE_SUB(detail_presensi.created_at, INTERVAL DAYOFMONTH(detail_presensi.created_at)-1 DAY)) + 1 as minggu, count(distinct detail_presensi.id_users) as jumlah_anggota')
             ->groupBy('minggu')
             ->get();
 

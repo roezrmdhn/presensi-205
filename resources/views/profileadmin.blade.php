@@ -120,7 +120,8 @@
 
                                     <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
 
-                                        <img src="{{ session('foto') }}" alt="Profile" class="rounded-circle">
+                                        <img src="{{ $admin->foto }}" alt="Profile" class="rounded-circle">
+                                        {{-- <p>{{ $admin->foto }}</p> --}}
                                         <h2>{{ $admin->name }}</h2>
                                         <h3>{{ $admin->email }}</h3>
 
@@ -132,7 +133,7 @@
 
                                     <!-- Profile Edit Form -->
                                     <form method="post"
-                                        action="{{ route('admin.update', ['id' => $admin->id_admin]) }}"
+                                        action="{{ route('admin.update', ['id' => $admin->id_users]) }}"
                                         enctype="multipart/form-data">
                                         @csrf
                                         <!-- Input untuk foto profil -->
@@ -223,7 +224,7 @@
                                         </div>
 
                                         <!-- Input untuk menyimpan ID user -->
-                                        <input type="hidden" name="userId" value="{{ $admin->id_admin }}">
+                                        <input type="hidden" name="userId" value="{{ $admin->id_users }}">
 
                                         <!-- Tombol untuk menyimpan perubahan -->
                                         <div class="text-center">

@@ -37,13 +37,13 @@ class PresensiController extends Controller
         // Generate kode acak untuk presensi
         $kodeAcak = Str::random(10);
 
-        // Dapatkan id_admin dari sesi
+        // Dapatkan id_users dari sesi
         $adminId = session('id');
 
         // Simpan presensi baru
         Presensi::create([
             'kode_acak' => $kodeAcak,
-            'id_admin' => $adminId,
+            'id_users' => $adminId,
             'event_name' => $validatedData['event_name'],
             'description' => $validatedData['description'],
             'time_start' => $validatedData['time_start'],
@@ -76,12 +76,12 @@ class PresensiController extends Controller
             'organisasi_id' => 'required|exists:organisasi,id_organisasi', // Pastikan id organisasi ada di tabel organisasi
         ]);
 
-        // Mendapatkan id_admin dari sesi
+        // Mendapatkan id_users dari sesi
         $adminId = session('id');
 
-        // Cari presensi berdasarkan ID dan id_admin
+        // Cari presensi berdasarkan ID dan id_users
         $presensi = Presensi::where('id_presensi', $id)
-            ->where('id_admin', $adminId)
+            ->where('id_users', $adminId)
             ->first();
 
         if ($presensi) {
@@ -138,28 +138,28 @@ class PresensiController extends Controller
             return redirect()->route('login');
         }
 
-        // Get id_admin from session
+        // Get id_users from session
         $adminId = session('id');
 
         // Update presensi status to 'Selesai' for presensi with 'time_end' in the past
-        Presensi::where('id_admin', $adminId)
+        Presensi::where('id_users', $adminId)
             ->where('status', 'Belum')
             ->where('time_end', '<', Carbon::now())
             ->get();
 
 
         // Count the number of presensi with status 'Belum' for the admin
-        $belumCount = Presensi::where('id_admin', $adminId)
+        $belumCount = Presensi::where('id_users', $adminId)
             ->where('status', 'Belum')
             ->count();
 
         // Count the number of presensi with status 'Selesai' for the admin
-        $selesaiCount = Presensi::where('id_admin', $adminId)
+        $selesaiCount = Presensi::where('id_users', $adminId)
             ->where('status', 'Selesai')
             ->count();
 
         // Count the total number of presensi for the admin
-        $totalPresensi = Presensi::where('id_admin', $adminId)->count();
+        $totalPresensi = Presensi::where('id_users', $adminId)->count();
         $organisasi = Organisasi::all();
 
         // Calculate the percentage of presensi 'Belum' from total
@@ -170,7 +170,7 @@ class PresensiController extends Controller
 
         // Retrieve all presensi data for the admin with status 'Belum'
         $presensiData = Presensi::join('organisasi', 'presensi.id_organisasi', '=', 'organisasi.id_organisasi')
-            // ->where('presensi.id_admin', $adminId)
+            // ->where('presensi.id_users', $adminId)
             ->where('presensi.status', 'Belum')
             ->orderBy('presensi.id_presensi', 'desc')
             ->select('presensi.*', 'organisasi.nama as nama_organisasi')
@@ -191,23 +191,23 @@ class PresensiController extends Controller
         $user = Organisasi::all();
 
         // Update presensi status to 'Selesai' for presensi with 'time_end' in the past
-        Presensi::where('id_admin', $adminId)
+        Presensi::where('id_users', $adminId)
             ->where('status', 'Belum')
             ->where('time_end', '<', Carbon::now())
             ->update(['status' => 'Selesai']);
 
         // Count the number of presensi with status 'Belum' for the admin
-        $belumCount = Presensi::where('id_admin', $adminId)
+        $belumCount = Presensi::where('id_users', $adminId)
             ->where('status', 'Belum')
             ->count();
 
         // Count the number of presensi with status 'Selesai' for the admin
-        $selesaiCount = Presensi::where('id_admin', $adminId)
+        $selesaiCount = Presensi::where('id_users', $adminId)
             ->where('status', 'Selesai')
             ->count();
 
         // Count the total number of presensi for the admin
-        $totalPresensi = Presensi::where('id_admin', $adminId)->count();
+        $totalPresensi = Presensi::where('id_users', $adminId)->count();
 
         // Calculate the percentage of presensi 'Belum' from total
         $belumPercentage = $totalPresensi > 0 ? ($belumCount / $totalPresensi) * 100 : 0;
@@ -216,7 +216,7 @@ class PresensiController extends Controller
         $selesaiPercentage = $totalPresensi > 0 ? ($selesaiCount / $totalPresensi) * 100 : 0;
 
         // Retrieve all presensi data for the admin with status 'Belum'
-        $presensiData = Presensi::where('id_admin', $adminId)
+        $presensiData = Presensi::where('id_users', $adminId)
             ->where('status', 'Belum')
             ->orderBy('id_presensi', 'desc')
             ->get();
@@ -233,30 +233,30 @@ class PresensiController extends Controller
             return redirect('/login');
         }
 
-        // Get id_admin from session
+        // Get id_users from session
         $adminId = session('id');
 
         // Update presensi status to 'Selesai' for presensi with 'time_end' in the past
-        Presensi::where('id_admin', $adminId)
+        Presensi::where('id_users', $adminId)
             ->where('status', 'Belum')
             ->where('time_end', '<', Carbon::now())
             ->update(['status' => 'Selesai']);
 
-        $belumCount = Presensi::where('id_admin', $adminId)
+        $belumCount = Presensi::where('id_users', $adminId)
             ->where('status', 'Belum')
             ->count();
 
-        $selesaiCount = Presensi::where('id_admin', $adminId)
+        $selesaiCount = Presensi::where('id_users', $adminId)
             ->where('status', 'Selesai')
             ->count();
 
-        $totalPresensi = Presensi::where('id_admin', $adminId)->count();
+        $totalPresensi = Presensi::where('id_users', $adminId)->count();
 
         $belumPercentage = $totalPresensi > 0 ? ($belumCount / $totalPresensi) * 100 : 0;
         $selesaiPercentage = $totalPresensi > 0 ? ($selesaiCount / $totalPresensi) * 100 : 0;
 
         $presensiData = Presensi::join('organisasi', 'presensi.id_organisasi', '=', 'organisasi.id_organisasi')
-            ->where('presensi.id_admin', $adminId)
+            ->where('presensi.id_users', $adminId)
             ->where('status', 'Selesai')
             ->orderBy('presensi.id_presensi', 'desc')
             ->select('presensi.*', 'organisasi.nama as nama_organisasi')
@@ -287,17 +287,17 @@ class PresensiController extends Controller
             return redirect('/login');
         }
 
-        // Get id_admin from session
+        // Get id_users from session
         $adminId = session('id');
         $organisasi_id = session('idOrganisasiTersimpan');
 
         // Update presensi status to 'Selesai' for presensi with 'time_end' in the past
-        Presensi::where('id_admin', $adminId)
+        Presensi::where('id_users', $adminId)
             ->where('status', 'Belum')
             ->where('time_end', '<', Carbon::now())
             ->update(['status' => 'Selesai']);
 
-        $presensiData = Presensi::where('id_admin', $adminId)
+        $presensiData = Presensi::where('id_users', $adminId)
             ->where('status', 'Selesai')
             ->where('event_name', $eventName)
             ->orderBy('id_presensi', 'desc')
@@ -324,8 +324,8 @@ class PresensiController extends Controller
         }
 
         $data = DB::table('detail_presensi')
-            ->join('anggota', 'detail_presensi.id_anggota', '=', 'anggota.id_anggota')
-            ->select('anggota.name', 'anggota.jabatan', 'anggota.departemen', 'anggota.phone', 'detail_presensi.created_at as waktu_presensi')
+            ->join('users', 'detail_presensi.id_users', '=', 'users.id_users')
+            ->select('users.name', 'users.jabatan', 'users.departemen', 'users.phone', 'detail_presensi.created_at as waktu_presensi')
             ->where('detail_presensi.id_presensi', $kode_acak->id_presensi)
             ->get();
 

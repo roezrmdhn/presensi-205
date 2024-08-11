@@ -4,9 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
-use App\Models\Admin;
 use App\Models\Presensi;
-use App\Models\Anggota;
+use App\Models\Users;
 use App\Models\Organisasi;
 use Carbon\Carbon;
 use Illuminate\Auth\Passwords\CanResetPassword;
@@ -26,27 +25,27 @@ class AnggotaController extends Controller
         }
         $organisasi = Organisasi::where('id_organisasi', '>', 0)->get();
         $adminId = session('id');
-        $users = Anggota::all();
+        $users = Users::all();
         $adminId = session('id');
 
         // Update presensi status to 'Selesai' for presensi with 'time_end' in the past
-        Presensi::where('id_admin', $adminId)
+        Presensi::where('id_users', $adminId)
             ->where('status', 'Belum')
             ->where('time_end', '<', Carbon::now())
             ->update(['status' => 'Selesai']);
 
         // Count the number of presensi with status 'Belum' for the admin
-        $belumCount = Presensi::where('id_admin', $adminId)
+        $belumCount = Presensi::where('id_users', $adminId)
             ->where('status', 'Belum')
             ->count();
 
         // Count the number of presensi with status 'Selesai' for the admin
-        $selesaiCount = Presensi::where('id_admin', $adminId)
+        $selesaiCount = Presensi::where('id_users', $adminId)
             ->where('status', 'Selesai')
             ->count();
 
         // Count the total number of presensi for the admin
-        $totalPresensi = Presensi::where('id_admin', $adminId)->count();
+        $totalPresensi = Presensi::where('id_users', $adminId)->count();
 
         // Calculate the percentage of presensi 'Belum' from total
         $belumPercentage = $totalPresensi > 0 ? ($belumCount / $totalPresensi) * 100 : 0;
@@ -55,7 +54,7 @@ class AnggotaController extends Controller
         $selesaiPercentage = $totalPresensi > 0 ? ($selesaiCount / $totalPresensi) * 100 : 0;
 
         // Retrieve all presensi data for the admin with status 'Belum'
-        $presensiData = Presensi::where('id_admin', $adminId)
+        $presensiData = Presensi::where('id_users', $adminId)
             ->where('status', 'Belum')
             ->orderBy('id_presensi', 'desc')
             ->get();
@@ -68,18 +67,18 @@ class AnggotaController extends Controller
     {
         // Validasi data yang diterima dari form
         $validatedData = $request->validate([
-            //'id_anggota' => 'required', // Tambahkan validasi untuk bidang ID
+            //'id_users' => 'required', // Tambahkan validasi untuk bidang ID
             'name' => 'required',
             'jabatan' => 'required',
             'departemen' => 'required',
             'address' => 'required',
             'phone' => 'required|numeric',
-            'email' => 'required|email|unique:anggota,email,' . $request->id . ',id_anggota', // Menggunakan id_anggota$request->id
+            'email' => 'required|email|unique:users,email,' . $request->id . ',id_users', // Menggunakan id_users$request->id
             //'password' => 'nullable', // Password menjadi opsional
         ]);
 
         // Ambil data pengguna berdasarkan ID
-        $user = Anggota::findOrFail($request->id);
+        $user = Users::findOrFail($request->id);
         $organisasi = Organisasi::where('id_organisasi', '>', 0)->get();
         // Perbarui data pengguna
         $user->name = $validatedData['name'];
@@ -109,7 +108,7 @@ class AnggotaController extends Controller
             \DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 
             // Temukan data pengguna berdasarkan ID
-            $user = Anggota::find($id);
+            $user = Users::find($id);
 
             // Periksa apakah data pengguna ditemukan
             if (!$user) {
@@ -131,7 +130,7 @@ class AnggotaController extends Controller
             \DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
             // Log error jika penghapusan gagal
-            \Log::error('Error deleting user:', ['id_anggota' => $id, 'error' => $e->getMessage()]);
+            \Log::error('Error deleting user:', ['id_users' => $id, 'error' => $e->getMessage()]);
             return redirect()->back()->with('error', 'Gagal menghapus data pengguna.');
         }
     }
@@ -142,19 +141,19 @@ class AnggotaController extends Controller
         // Validasi data yang diterima dari form
         $validatedData = $request->validate([
             'name' => 'required|string|max:30',
-            'email' => 'required|string|email|max:50|unique:anggota',
+            'email' => 'required|string|email|max:50|unique:users',
             'password' => 'required|string', // Pastikan password memiliki panjang minimal dan dikonfirmasi
             'jabatan' => 'required|string|max:20',
             'departemen' => 'required|string|max:50',
             'address' => 'required|string|max:80',
-            'phone' => 'required|string|max:13|unique:anggota', // Validasi nomor telepon sebagai string untuk menangani berbagai format nomor
+            'phone' => 'required|string|max:13|unique:users', // Validasi nomor telepon sebagai string untuk menangani berbagai format nomor
         ]);
 
         // Enkripsi password
         $validatedData['password'] = bcrypt($validatedData['password']);
 
         // Membuat pengguna baru
-        $user = Anggota::create([
+        $user = Users::create([
             'name' => $validatedData['name'],
             'email' => $validatedData['email'],
             'password' => $validatedData['password'],
@@ -162,6 +161,8 @@ class AnggotaController extends Controller
             'departemen' => $validatedData['departemen'],
             'address' => $validatedData['address'],
             'phone' => $validatedData['phone'],
+            'role' => 2,
+            'more' => '',
             'foto' => 'assets/img/profile-img.jpg', // Pastikan panjang nilai ini sesuai dengan kolom database
         ]);
 
@@ -182,46 +183,40 @@ class AnggotaController extends Controller
             'email' => 'required|email',
             'password' => 'required'
         ]);
+
         // Check if the user exists in the users table
-        $user = Anggota::where('email', $credentials['email'])->first();
+        $user = Users::where('email', $credentials['email'])->first();
+
         if ($user && password_verify($credentials['password'], $user->password)) {
-            // If the user exists and the password is correct, log in the user
+            // Set common session data
             session(['name' => $user->name]);
-            session(['id' => $user->id_anggota]);
+            session(['id' => $user->id_users]); // Assuming id_users is the primary key
             session(['foto' => $user->foto ?: 'assets/img/profile-img.jpg']);
-            session(['level' => "user"]);
-            return redirect('/user');
-        }
-        // dd($user);
-
-        // Check if the user exists in the admins table
-        $admin = Admin::where('email', $credentials['email'])->first();
-        if ($admin && password_verify($credentials['password'], $admin->password)) {
-            session(['name' => $admin->name]);
-            session(['id' => $admin->id_admin]);
-            session(['isAdmin' => $admin->isAdmin]);
-            session(['foto' => $admin->foto ?: 'assets/img/profile-img.jpg']);
-            session(['idOrganisasiTersimpan' => $admin->id_organisasi]);
-            session(['level' => "admin"]);
-            return redirect('/dashboardAdmin'); // Redirect ke halaman dashboard admin
-        }
-
-        // dd(bcrypt($credentials['password']));
-        if ($admin && password_verify($credentials['password'], $admin->password)) {
-            // If the admin exists and the password is correct, log in the admin
-            session(['name' => $admin->name]);
-            session(['id' => $admin->id_admin]);
-            session(['foto' => $admin->foto ?: 'assets/img/profile-img.jpg']);
-            session(['idOrganisasiTersimpan' => $admin->id_organisasi]);
-            session(['level' => "admin"]);
-            // dd( password_verify($credentials['password'], $admin->password));
-
-            return redirect()->route('admin.dashboard');
+            session(['idOrganisasiTersimpan' => $user->id_organisasi]);
+            session(['role' => $user->role]); // Save the role in session
+            // Check the role to determine the level
+            if ($user->role == 1) {
+                session(['foto' => $user->foto ?: 'assets/img/profile-img.jpg']);
+                session(['level' => 'admin']);
+                session(['role' => $user->role]); // Save the role in session
+                return redirect()->route('admin.dashboard'); // Redirect to admin dashboard
+            } elseif ($user->role == 0) {
+                session(['foto' => $user->foto ?: 'assets/img/profile-img.jpg']);
+                session(['level' => 'user']);
+                session(['role' => $user->role]); // Save the role in session
+                return redirect()->route('riwayatjadwal');
+            } elseif ($user->role == 2) {
+                session(['foto' => $user->foto ?: 'assets/img/profile-img.jpg']);
+                session(['level' => 'user']);
+                session(['role' => $user->role]); // Save the role in session
+                return redirect('/user'); // Redirect to user dashboard
+            }
         }
 
-        // If no user or admin with the provided email and password is found
+        // If no user with the provided email and password is found
         return redirect('/sign-in')->with('error', 'Invalid email or password.');
     }
+
 
 
     public function logout(Request $request)
@@ -245,7 +240,7 @@ class AnggotaController extends Controller
         // Lakukan pengecekan level
         if ($level === 'user') {
             // Jika level adalah user, temukan data user dan redirect ke halaman profile user
-            $user = Anggota::find(session('id'));
+            $user = Users::find(session('id'));
             if ($user) {
                 return view('profileuser', compact('user', 'organisasi'));
             } else {
@@ -253,11 +248,11 @@ class AnggotaController extends Controller
             }
         } elseif ($level === 'admin') {
             // Jika level adalah admin, temukan data admin dan redirect ke halaman profile admin
-            $admin = Admin::find(session('id'));
+            $admin = Users::find(session('id'));
             if ($admin) {
                 return view('profileadmin', compact('admin', 'organisasi'));
             } else {
-                return redirect('/login')->with('error', 'Admin not found.');
+                return redirect('/login')->with('error', 'Users not found.');
             }
         } else {
             // Jika level tidak sesuai, redirect ke halaman login atau halaman lainnya
@@ -281,12 +276,12 @@ class AnggotaController extends Controller
         ]);
 
         // Cari data admin berdasarkan ID
-        // $user = Anggota::find($request->userId);
+        // $user = Users::find($request->userId);
         // Cari data admin berdasarkan ID
-        // $anggota = Anggota::find($request->userId);
+        // $anggota = Users::find($request->userId);
 
         // Temukan data admin berdasarkan ID
-        $user = Anggota::where('id_anggota', $id)->firstOrFail();
+        $user = Users::where('id_users', $id)->firstOrFail();
 
         // Perbarui data admin
         $user->name = $validatedData['name'];
@@ -345,7 +340,7 @@ class AnggotaController extends Controller
         $id = session('id');
 
         // Mendapatkan user yang sedang login
-        $user = Anggota::where('id_anggota', $id)->first();
+        $user = Users::where('id_users', $id)->first();
         // dd($user);
 
         // Memeriksa apakah password lama yang dimasukkan benar

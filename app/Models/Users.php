@@ -7,16 +7,28 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-class Admin extends Authenticatable
+class Users extends Authenticatable
 {
-    protected $table = 'admin';
-    protected $primaryKey = 'id_admin';
+    protected $table = 'users';
+    protected $primaryKey = 'id_users';
     protected $fillable = [
-        'name', 'email', 'password', 'jabatan', 'id_organisasi', 'departemen', 'address', 'phone', 'more', 'isAdmin', 'password', 'foto'
+        'name',
+        'email',
+        'password',
+        'jabatan',
+        'id_organisasi',
+        'departemen',
+        'address',
+        'phone',
+        'more',
+        'role',
+        'password',
+        'foto'
     ];
 
     protected $hidden = [
-        'password', 'remember_token',
+        'password',
+        'remember_token',
     ];
     public function organisasi()
     {

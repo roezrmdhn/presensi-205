@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
-use App\Models\Admin;
+use App\Models\Users;
 use Illuminate\Http\Request;
 use App\Models\Organisasi;
 // use App\Models\Presensi;
@@ -19,7 +19,7 @@ class AdminController extends Controller
             return redirect()->route('login');
         }
         $organisasi = Organisasi::where('id_organisasi', '>', 0)->get();
-        $users = Admin::with('organisasi')->get();
+        $users = Users::with('organisasi')->get();
 
         return view('admindata', compact('users', 'organisasi'));
     }
@@ -37,7 +37,7 @@ class AdminController extends Controller
             'address' => 'required|string|max:80',
             'phone' => 'required|string|max:13 |unique:admin',
             'more' => 'required|string|max:50',
-            // 'isAdmin' => 0,
+            // 'role' => 0,
 
         ]);
 
@@ -59,7 +59,7 @@ class AdminController extends Controller
         }
 
         // Membuat admin baru
-        $admin = Admin::create([
+        $admin = Users::create([
             'name' => $validatedData['name'],
             'email' => $validatedData['email'],
             'password' => bcrypt($validatedData['password']),
@@ -68,7 +68,7 @@ class AdminController extends Controller
             'address' => $validatedData['address'],
             'phone' => $validatedData['phone'],
             'more' => $validatedData['more'],
-            // 'isAdmin' => $validatedData['isAdmin'],
+            // 'role' => $validatedData['role'],
             'foto' => 'assets/img/profile-img.jpg',
         ]);
 
@@ -92,15 +92,15 @@ class AdminController extends Controller
             'phone' => 'required|string|max:13',
             'more' => 'required|string|max:50',
             'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Jika ingin membatasi ukuran gambar
-            // 'isAdmin' => 0,
+            // 'role' => 0,
         ]);
 
         // Cari data admin berdasarkan ID
-        $admin = Admin::find($request->userId);
+        $admin = Users::find($request->userId);
 
         // Jika admin tidak ditemukan, kembalikan response error
         if (!$admin) {
-            return redirect()->back()->with('error', 'Admin not found.');
+            return redirect()->back()->with('error', 'Users not found.');
         }
 
         // Update data admin dengan data yang diterima dari form
@@ -111,7 +111,7 @@ class AdminController extends Controller
         $admin->address = $validatedData['address'];
         $admin->phone = $validatedData['phone'];
         $admin->more = $validatedData['more'];
-        // $admin->isAdmin = 0;
+        // $admin->role = 0;
 
         // Proses upload foto jika ada
         if ($request->hasFile('foto')) {
@@ -149,7 +149,7 @@ class AdminController extends Controller
         $id = session('id');
 
         // Mendapatkan user yang sedang login
-        $admin = Admin::where('id_admin', $id)->first();
+        $admin = Users::where('id_users', $id)->first();
         // dd($admin);
 
         // Memeriksa apakah password lama yang dimasukkan benar
@@ -167,7 +167,7 @@ class AdminController extends Controller
 
     public function edit($id)
     {
-        $data = Admin::findOrFail($id);
+        $data = Users::findOrFail($id);
         $organisasi = Organisasi::where('id_organisasi', '>', 0)->get(); // Mengambil semua organisasi kecuali id=0
         return view('admindata', compact('data', 'organisasi'));
     }
@@ -186,7 +186,7 @@ class AdminController extends Controller
         ]);
 
         // Temukan data admin berdasarkan ID
-        $admin = Admin::where('id_admin', $id)->firstOrFail();
+        $admin = Users::where('id_users', $id)->firstOrFail();
 
         // Perbarui data admin
         $admin->name = $validatedData['name'];

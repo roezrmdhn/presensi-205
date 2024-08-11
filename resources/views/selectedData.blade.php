@@ -118,7 +118,7 @@
                 <li class="nav-item">
                     <a class="nav-link" href="/admin">Jadwal</a>
                 </li>
-                @if (session('isAdmin') == 1)
+                @if (session('role') == 1)
                     <li class="nav-item">
                         <a class="nav-link" href="/organisasi">Organisasi</a>
                     </li>
@@ -196,13 +196,13 @@
     $labels = [];
     $dataAnggota = [];
     $dataKegiatan = [];
-
+    
     foreach ($hasil_per_minggu as $hasil) {
         $labels[] = 'Minggu ' . $hasil['minggu'];
         $dataAnggota[] = $hasil['jumlah_anggota'];
         $dataKegiatan[] = $hasil['jumlah_kegiatan'];
     }
-
+    
     // Encode array menjadi format JSON
     $labelsJson = json_encode($labels);
     $dataAnggotaJson = json_encode($dataAnggota);
@@ -211,74 +211,74 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-    var ctxAnggota = document.getElementById('chartJumlahAnggota').getContext('2d');
-    var ctxKegiatan = document.getElementById('chartJumlahKegiatan').getContext('2d');
+            var ctxAnggota = document.getElementById('chartJumlahAnggota').getContext('2d');
+            var ctxKegiatan = document.getElementById('chartJumlahKegiatan').getContext('2d');
 
-    // Mendapatkan data dari PHP yang sudah di-encode menjadi JSON
-    var labels = <?php echo $labelsJson; ?>;
-    var dataAnggota = <?php echo $dataAnggotaJson; ?>;
-    var dataKegiatan = <?php echo $dataKegiatanJson; ?>;
+            // Mendapatkan data dari PHP yang sudah di-encode menjadi JSON
+            var labels = <?php echo $labelsJson; ?>;
+            var dataAnggota = <?php echo $dataAnggotaJson; ?>;
+            var dataKegiatan = <?php echo $dataKegiatanJson; ?>;
 
-    // Chart untuk Jumlah Anggota
-    new Chart(ctxAnggota, {
-        type: 'line',
-        data: {
-            labels: labels,
-            datasets: [{
-                label: 'Jumlah Anggota Yang Melakukan Presensi',
-                backgroundColor: 'rgba(75, 119, 190, 0.8)', // Ubah warna latar belakang grafik
-                borderColor: 'rgba(75, 119, 190, 1)', // Ubah warna border grafik
-                borderWidth: 1,
-                data: dataAnggota,
-            }]
-        },
-        options: {
-            maintainAspectRatio: false,
-            responsive: true,
-            scales: {
-                y: { // Perubahan dari yAxes menjadi y
-                    beginAtZero: true,
-                    ticks: {
-                            stepSize: 1,
-                            callback: function(value, index, values) {
-                                return value + ' Anggota';
+            // Chart untuk Jumlah Anggota
+            new Chart(ctxAnggota, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Jumlah Anggota Yang Melakukan Presensi',
+                        backgroundColor: 'rgba(75, 119, 190, 0.8)', // Ubah warna latar belakang grafik
+                        borderColor: 'rgba(75, 119, 190, 1)', // Ubah warna border grafik
+                        borderWidth: 1,
+                        data: dataAnggota,
+                    }]
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    responsive: true,
+                    scales: {
+                        y: { // Perubahan dari yAxes menjadi y
+                            beginAtZero: true,
+                            ticks: {
+                                stepSize: 1,
+                                callback: function(value, index, values) {
+                                    return value + ' Anggota';
+                                }
                             }
                         }
+                    }
                 }
-            }
-        }
-    });
+            });
 
-    // Chart untuk Jumlah Kegiatan
-    new Chart(ctxKegiatan, {
-        type: 'bar',
-        data: {
-            labels: labels,
-            datasets: [{
-                label: 'Jumlah Kegiatan',
-                backgroundColor: 'rgba(75, 119, 190, 0.8)', // Ubah warna latar belakang grafik
-                borderColor: 'rgba(75, 119, 190, 1)', // Ubah warna border grafik
-                borderWidth: 1,
-                data: dataKegiatan,
-            }]
-        },
-        options: {
-            maintainAspectRatio: false,
-            responsive: true,
-            scales: {
-                y: { // Perubahan dari yAxes menjadi y
-                    beginAtZero: true,
-                    ticks: {
-                            stepSize: 1,
-                            callback: function(value, index, values) {
-                                return value + ' kegiatan';
+            // Chart untuk Jumlah Kegiatan
+            new Chart(ctxKegiatan, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Jumlah Kegiatan',
+                        backgroundColor: 'rgba(75, 119, 190, 0.8)', // Ubah warna latar belakang grafik
+                        borderColor: 'rgba(75, 119, 190, 1)', // Ubah warna border grafik
+                        borderWidth: 1,
+                        data: dataKegiatan,
+                    }]
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    responsive: true,
+                    scales: {
+                        y: { // Perubahan dari yAxes menjadi y
+                            beginAtZero: true,
+                            ticks: {
+                                stepSize: 1,
+                                callback: function(value, index, values) {
+                                    return value + ' kegiatan';
+                                }
                             }
                         }
+                    }
                 }
-            }
-        }
-    });
-});
+            });
+        });
     </script>
 
 </body>

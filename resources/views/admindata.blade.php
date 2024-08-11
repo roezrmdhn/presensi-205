@@ -213,7 +213,7 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="/admin">Data Jadwal</a>
                             </li>
-                            @if (session('isAdmin') == 0)
+                            @if (session('role') == 0)
                                 <li class="nav-item">
                                     <a class="nav-link" href="/riwayatjadwal">Riwayat</a>
                                 </li>
@@ -221,7 +221,7 @@
                         </ul>
                     </div>
                 </li>
-                @if (session('isAdmin') == 1)
+                @if (session('role') == 1)
                     <li class="nav-item">
                         <a class="nav-link" href="/organisasi">Organisasi</a>
                     </li>
@@ -285,150 +285,161 @@
 
                                     <tbody>
                                         @foreach ($users as $data)
-                                            <tr>
-                                                <td>{{ $data->name }}</td>
-                                                <td>{{ $data->email }}</td>
-                                                <td>{{ $data->jabatan }}</td>
-                                                <td>
-                                                    @if ($data->organisasi)
-                                                        {{ $data->organisasi->nama }}
-                                                    @else
-                                                        Tidak ada organisasi
-                                                    @endif
-                                                </td>
-                                                <td>{{ $data->phone }}</td>
-                                                <td>{{ $data->address }}</td>
-                                                <td>
-                                                    <a type="button" data-bs-toggle="modal"
-                                                        data-bs-target="#verticalycentered{{ $data->id_admin }}">
-                                                        <i class="bi bi-pencil"
-                                                            style="color: black; font-size: 20px;"></i>
-                                                    </a>
-                                                    <div class="modal fade" id="verticalycentered{{ $data->id_admin }}"
-                                                        tabindex="-1">
-                                                        <div class="modal-dialog modal-dialog-centered">
-                                                            <div class="modal-content">
-                                                                <div class="modal-header">
-                                                                    <h5 class="modal-title">Edit Data</h5>
-                                                                    <button type="button" class="btn-close"
-                                                                        data-bs-dismiss="modal"
-                                                                        aria-label="Close"></button>
-                                                                </div>
-                                                                <div class="modal-body">
-                                                                    <form method="post"
-                                                                        action="{{ route('admin.update', ['id' => $data->id_admin]) }}"
-                                                                        enctype="multipart/form-data">
-                                                                        @csrf
-                                                                        <input type="hidden" name="id"
-                                                                            value="{{ $data->id_admin }}">
+                                            @if (in_array($data->role, [0, 1]))
+                                                <tr>
+                                                    <td>{{ $data->name }}</td>
+                                                    <td>{{ $data->email }}</td>
+                                                    <td>{{ $data->jabatan }}</td>
+                                                    <td>
+                                                        @if ($data->organisasi)
+                                                            {{ $data->organisasi->nama }}
+                                                        @else
+                                                            Tidak ada organisasi
+                                                        @endif
+                                                    </td>
+                                                    <td>{{ $data->phone }}</td>
+                                                    <td>{{ $data->address }}</td>
+                                                    <td>
+                                                        <a type="button" data-bs-toggle="modal"
+                                                            data-bs-target="#verticalycentered{{ $data->id_users }}">
+                                                            <i class="bi bi-pencil"
+                                                                style="color: black; font-size: 20px;"></i>
+                                                        </a>
+                                                        <div class="modal fade"
+                                                            id="verticalycentered{{ $data->id_users }}" tabindex="-1">
+                                                            <div class="modal-dialog modal-dialog-centered">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <h5 class="modal-title">Edit Data</h5>
+                                                                        <button type="button" class="btn-close"
+                                                                            data-bs-dismiss="modal"
+                                                                            aria-label="Close"></button>
+                                                                    </div>
+                                                                    <div class="modal-body">
+                                                                        <form method="post"
+                                                                            action="{{ route('admin.update', ['id' => $data->id_users]) }}"
+                                                                            enctype="multipart/form-data">
+                                                                            @csrf
+                                                                            <input type="hidden" name="id"
+                                                                                value="{{ $data->id_users }}">
 
-                                                                        <!-- Nama -->
-                                                                        <div class="row mb-3">
-                                                                            <label for="name"
-                                                                                class="col-md-4 col-lg-3 col-form-label">Nama</label>
-                                                                            <div class="col-md-8 col-lg-9">
-                                                                                <input name="name" type="text"
-                                                                                    class="form-control"
-                                                                                    id="name"
-                                                                                    value="{{ $data->name }}"
-                                                                                    required>
+                                                                            <!-- Nama -->
+                                                                            <div class="row mb-3">
+                                                                                <label for="name"
+                                                                                    class="col-md-4 col-lg-3 col-form-label">Nama</label>
+                                                                                <div class="col-md-8 col-lg-9">
+                                                                                    <input name="name"
+                                                                                        type="text"
+                                                                                        class="form-control"
+                                                                                        id="name"
+                                                                                        value="{{ $data->name }}"
+                                                                                        required>
+                                                                                </div>
                                                                             </div>
-                                                                        </div>
 
-                                                                        <!-- jabatan -->
-                                                                        <div class="row mb-3">
-                                                                            <label for="jabatan"
-                                                                                class="col-md-4 col-lg-3 col-form-label">jabatan</label>
-                                                                            <div class="col-md-8 col-lg-9">
-                                                                                <input name="jabatan" type="text"
-                                                                                    class="form-control"
-                                                                                    id="jabatan"
-                                                                                    value="{{ $data->jabatan }}"
-                                                                                    required>
+                                                                            <!-- jabatan -->
+                                                                            <div class="row mb-3">
+                                                                                <label for="jabatan"
+                                                                                    class="col-md-4 col-lg-3 col-form-label">jabatan</label>
+                                                                                <div class="col-md-8 col-lg-9">
+                                                                                    <input name="jabatan"
+                                                                                        type="text"
+                                                                                        class="form-control"
+                                                                                        id="jabatan"
+                                                                                        value="{{ $data->jabatan }}"
+                                                                                        required>
+                                                                                </div>
                                                                             </div>
-                                                                        </div>
 
-                                                                        <!-- Departemen -->
-                                                                        <div class="row mb-3">
-                                                                            <label for="departemen"
-                                                                                class="col-md-4 col-lg-3 col-form-label">{{ __('Departemen') }}</label>
-                                                                            <div class="col-md-8 col-lg-9">
-                                                                                <select class="form-select"
-                                                                                    name="departemen" id="departemen"
-                                                                                    required>
-                                                                                    <option value="" disabled
-                                                                                        selected>
-                                                                                        {{ __('Pilih Organisasi') }}
-                                                                                    </option>
-                                                                                    @foreach ($organisasi as $org)
-                                                                                        <option
-                                                                                            value="{{ $org->id_organisasi }}"
-                                                                                            {{ $data->departemen == $org->nama ? 'selected' : '' }}>
-                                                                                            {{ $org->nama }}
+                                                                            <!-- Departemen -->
+                                                                            <div class="row mb-3">
+                                                                                <label for="departemen"
+                                                                                    class="col-md-4 col-lg-3 col-form-label">{{ __('Departemen') }}</label>
+                                                                                <div class="col-md-8 col-lg-9">
+                                                                                    <select class="form-select"
+                                                                                        name="departemen"
+                                                                                        id="departemen" required>
+                                                                                        <option value="" disabled
+                                                                                            selected>
+                                                                                            {{ __('Pilih Organisasi') }}
                                                                                         </option>
-                                                                                    @endforeach
-                                                                                </select>
+                                                                                        @foreach ($organisasi as $org)
+                                                                                            <option
+                                                                                                value="{{ $org->id_organisasi }}"
+                                                                                                {{ $data->departemen == $org->nama ? 'selected' : '' }}>
+                                                                                                {{ $org->nama }}
+                                                                                            </option>
+                                                                                        @endforeach
+                                                                                    </select>
+                                                                                </div>
                                                                             </div>
-                                                                        </div>
 
-                                                                        <!-- Alamat -->
-                                                                        <div class="row mb-3">
-                                                                            <label for="address"
-                                                                                class="col-md-4 col-lg-3 col-form-label">Alamat</label>
-                                                                            <div class="col-md-8 col-lg-9">
-                                                                                <input name="address" type="text"
-                                                                                    class="form-control"
-                                                                                    id="address"
-                                                                                    value="{{ $data->address }}"
-                                                                                    required>
+                                                                            <!-- Alamat -->
+                                                                            <div class="row mb-3">
+                                                                                <label for="address"
+                                                                                    class="col-md-4 col-lg-3 col-form-label">Alamat</label>
+                                                                                <div class="col-md-8 col-lg-9">
+                                                                                    <input name="address"
+                                                                                        type="text"
+                                                                                        class="form-control"
+                                                                                        id="address"
+                                                                                        value="{{ $data->address }}"
+                                                                                        required>
+                                                                                </div>
                                                                             </div>
-                                                                        </div>
 
-                                                                        <!-- Nomor Telepon -->
-                                                                        <div class="row mb-3">
-                                                                            <label for="phone"
-                                                                                class="col-md-4 col-lg-3 col-form-label">Nomor
-                                                                                Telepon</label>
-                                                                            <div class="col-md-8 col-lg-9">
-                                                                                <input name="phone" type="text"
-                                                                                    class="form-control"
-                                                                                    id="phone"
-                                                                                    value="{{ $data->phone }}"
-                                                                                    required>
+                                                                            <!-- Nomor Telepon -->
+                                                                            <div class="row mb-3">
+                                                                                <label for="phone"
+                                                                                    class="col-md-4 col-lg-3 col-form-label">Nomor
+                                                                                    Telepon</label>
+                                                                                <div class="col-md-8 col-lg-9">
+                                                                                    <input name="phone"
+                                                                                        type="text"
+                                                                                        class="form-control"
+                                                                                        id="phone"
+                                                                                        value="{{ $data->phone }}"
+                                                                                        required>
+                                                                                </div>
                                                                             </div>
-                                                                        </div>
 
-                                                                        <!-- Email -->
-                                                                        <div class="row mb-3">
-                                                                            <label for="email"
-                                                                                class="col-md-4 col-lg-3 col-form-label">Email</label>
-                                                                            <div class="col-md-8 col-lg-9">
-                                                                                <input name="email" type="email"
-                                                                                    class="form-control"
-                                                                                    id="email"
-                                                                                    value="{{ $data->email }}"
-                                                                                    required>
+                                                                            <!-- Email -->
+                                                                            <div class="row mb-3">
+                                                                                <label for="email"
+                                                                                    class="col-md-4 col-lg-3 col-form-label">Email</label>
+                                                                                <div class="col-md-8 col-lg-9">
+                                                                                    <input name="email"
+                                                                                        type="email"
+                                                                                        class="form-control"
+                                                                                        id="email"
+                                                                                        value="{{ $data->email }}"
+                                                                                        required>
+                                                                                </div>
                                                                             </div>
-                                                                        </div>
 
-                                                                        <div class="modal-footer">
-                                                                            <button type="button"
-                                                                                class="btn btn-secondary"
-                                                                                data-bs-dismiss="modal">Batal</button>
-                                                                            <button type="submit"
-                                                                                class="btn btn-primary">Simpan</button>
-                                                                        </div>
-                                                                    </form>
+                                                                            <div class="modal-footer">
+                                                                                <button type="button"
+                                                                                    class="btn btn-secondary"
+                                                                                    data-bs-dismiss="modal">Batal</button>
+                                                                                <button type="submit"
+                                                                                    class="btn btn-primary">Simpan</button>
+                                                                            </div>
+                                                                        </form>
+
+                                                                    </div>
+
+
 
                                                                 </div>
-
-
-
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                </td>
-                                            </tr>
+                                                        <a type="button" class="px-2 delete-user"
+                                                            data-user-id="{{ $data->id_users }}">
+                                                            <i class="bi bi-trash"
+                                                                style="color: black; font-size: 20px;"></i>
+                                                        </a>
+                                                </tr>
+                                            @endif
                                         @endforeach
                                     </tbody>
 
@@ -517,8 +528,8 @@
                             <div class="invalid-feedback">Please enter more!</div>
                         </div>
                         {{-- <div class="col-12">
-                            <label for="isAdmin" class="form-label">Aktor</label>
-                            <select name="isAdmin" id="isAdmin" class="form-select">
+                            <label for="role" class="form-label">Aktor</label>
+                            <select name="role" id="role" class="form-select">
                                 <option value="" disabled selected>Pilih Aktor</option>
                                 <option value="1">Admin</option>
                                 <option value="0">Sekertaris</option>
