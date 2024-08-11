@@ -303,7 +303,7 @@ class PresensiController extends Controller
             ->orderBy('id_presensi', 'desc')
             ->get();
 
-        // Ambil nama organisasi
+        // Ambil nama organisasi dan foto
         $organisasi = Organisasi::find($organisasi_id);
         $riwayatjadwal = Organisasi::all();
 
@@ -314,13 +314,12 @@ class PresensiController extends Controller
             ->join('presensi', 'detail_presensi.id_presensi', '=', 'presensi.id_presensi')
             ->select('presensi.kode_acak', 'presensi.event_name', 'presensi.id_presensi')
             ->where('presensi.id_organisasi', $organisasi_id)
-            ->where('presensi.event_name', $eventName) // Tambahkan filter event_name
+            ->where('presensi.event_name', $eventName)
             ->whereDate('presensi.time_start', '<=', $startDate)
             ->first();
 
         if (!$kode_acak) {
             $data = [];
-
             return view('riwayat', compact('data', 'riwayatjadwal', 'presensiData'))->with('warning', true);
         }
 
@@ -337,7 +336,7 @@ class PresensiController extends Controller
         $countAbsen = DB::table('detail_presensi')
             ->join('presensi', 'detail_presensi.id_presensi', '=', 'presensi.id_presensi')
             ->where('presensi.id_organisasi', $organisasi_id)
-            ->where('presensi.event_name', $eventName) // Tambahkan filter event_name
+            ->where('presensi.event_name', $eventName)
             ->whereDate('presensi.time_start', '<=', $startDate)
             ->count();
 
