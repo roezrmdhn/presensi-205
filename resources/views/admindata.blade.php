@@ -223,13 +223,16 @@
                     <li class="nav-item">
                         <a class="nav-link" href="/organisasi">Organisasi</a>
                     </li>
-                @elseif (session('role') == 0)
                     <li class="nav-item">
                         <a class="nav-link" href="/userdata">Anggota</a>
                     </li>
-                @elseif (session('role') == 1)
                     <li class="nav-item">
                         <a class="nav-link" href="/admindata">Admin/Sekretaris</a>
+                    </li>
+                @endif
+                @if (session('role') == 0)
+                    <li class="nav-item">
+                        <a class="nav-link" href="/userdata">Anggota</a>
                     </li>
                 @endif
             </ul>
@@ -306,7 +309,8 @@
                                                                 style="color: black; font-size: 20px;"></i>
                                                         </a>
                                                         <div class="modal fade"
-                                                            id="verticalycentered{{ $data->id_users }}" tabindex="-1">
+                                                            id="verticalycentered{{ $data->id_users }}"
+                                                            tabindex="-1">
                                                             <div class="modal-dialog modal-dialog-centered">
                                                                 <div class="modal-content">
                                                                     <div class="modal-header">
