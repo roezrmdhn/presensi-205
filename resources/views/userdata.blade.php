@@ -288,7 +288,13 @@
                                                             <td>{{ $data->name }}</td>
                                                             <td>{{ $data->email }}</td>
                                                             <td>{{ $data->jabatan }}</td>
-                                                            <td>{{ $data->departemen }}</td>
+                                                            <td>
+                                                                @if ($data->organisasi)
+                                                                    {{ $data->organisasi->nama }}
+                                                                @else
+                                                                    Tidak ada organisasi
+                                                                @endif
+                                                            </td>
                                                             <td>{{ $data->phone }}</td>
                                                             <td>{{ $data->address }}</td>
                                                             <td>
@@ -362,8 +368,8 @@
                                                                                                 </option>
                                                                                                 @foreach ($organisasi as $org)
                                                                                                     <option
-                                                                                                        value="{{ $org->nama }}"
-                                                                                                        {{ $data->departemen == $org->nama ? 'selected' : '' }}>
+                                                                                                        value="{{ $org->id_organisasi }}"
+                                                                                                        {{ $data->id_organisasi == $org->id_organisasi ? 'selected' : '' }}>
                                                                                                         {{ $org->nama }}
                                                                                                     </option>
                                                                                                 @endforeach
@@ -457,7 +463,13 @@
                                                         <td>{{ $data->name }}</td>
                                                         <td>{{ $data->email }}</td>
                                                         <td>{{ $data->jabatan }}</td>
-                                                        <td>{{ $data->departemen }}</td>
+                                                        <td>
+                                                            @if ($data->organisasi)
+                                                                {{ $data->organisasi->nama }}
+                                                            @else
+                                                                Tidak ada organisasi
+                                                            @endif
+                                                        </td>
                                                         <td>{{ $data->phone }}</td>
                                                         <td>{{ $data->address }}</td>
                                                         <td>
@@ -528,8 +540,8 @@
                                                                                             </option>
                                                                                             @foreach ($organisasi as $org)
                                                                                                 <option
-                                                                                                    value="{{ $org->nama }}"
-                                                                                                    {{ $data->departemen == $org->nama ? 'selected' : '' }}>
+                                                                                                    value="{{ $org->id_organisasi }}"
+                                                                                                    {{ $data->id_organisasi == $org->id_organisasi ? 'selected' : '' }}>
                                                                                                     {{ $org->nama }}
                                                                                                 </option>
                                                                                             @endforeach
@@ -685,7 +697,7 @@
                                     <select class="form-select" name="departemen" id="departemen" required>
                                         <option value="" disabled selected>Pilih Organisasi</option>
                                         @foreach ($organisasi as $org)
-                                            <option value="{{ $org->nama }}">{{ $org->nama }}</option>
+                                            <option value="{{ $org->id_organisasi }}">{{ $org->nama }}</option>
                                         @endforeach
                                     </select>
                                     <div class="invalid-feedback">Masukkan Departemen</div>

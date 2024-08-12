@@ -526,7 +526,7 @@
                             <input type="text" name="phone" class="form-control" id="yourPhone" required>
                             <div class="invalid-feedback">Masukkan No Handphone yang valid</div>
                         </div>
-                        <div class="col-12">
+                        <div class="col-12" hidden>
                             <label for="yourMore" class="form-label">Lainya</label>
                             <input type="text" name="more" class="form-control" id="yourmore">
                             <div class="invalid-feedback">Please enter more!</div>

@@ -25,7 +25,7 @@ class AnggotaController extends Controller
         }
         $organisasi = Organisasi::where('id_organisasi', '>', 0)->get();
         $adminId = session('id');
-        $users = Users::all();
+        $users = Users::with('organisasi')->get();
         $adminId = session('id');
 
         // Update presensi status to 'Selesai' for presensi with 'time_end' in the past
@@ -83,7 +83,7 @@ class AnggotaController extends Controller
         // Perbarui data pengguna
         $user->name = $validatedData['name'];
         $user->jabatan = $validatedData['jabatan'];
-        $user->departemen = $validatedData['departemen'];
+        $user->id_organisasi = $validatedData['departemen'];
         $user->address = $validatedData['address'];
         $user->phone = $validatedData['phone'];
         $user->email = $validatedData['email'];
@@ -158,7 +158,7 @@ class AnggotaController extends Controller
             'email' => $validatedData['email'],
             'password' => $validatedData['password'],
             'jabatan' => $validatedData['jabatan'],
-            'departemen' => $validatedData['departemen'],
+            'id_organisasi' => $validatedData['departemen'],
             'address' => $validatedData['address'],
             'phone' => $validatedData['phone'],
             'role' => 2,
