@@ -199,16 +199,19 @@ class AnggotaController extends Controller
                 session(['foto' => $user->foto ?: 'assets/img/profile-img.jpg']);
                 session(['level' => 'admin']);
                 session(['role' => $user->role]); // Save the role in session
+                session(['idOrganisasiTersimpan' => $user->id_organisasi]);
                 return redirect()->route('dashboardAdmin'); // Redirect to admin dashboard
             } elseif ($user->role == 0) {
                 session(['foto' => $user->foto ?: 'assets/img/profile-img.jpg']);
                 session(['level' => 'user']);
                 session(['role' => $user->role]); // Save the role in session
-                return redirect()->route('dashboard-admin');
+                session(['idOrganisasiTersimpan' => $user->id_organisasi]);
+                return redirect()->route('dashboardAdmin');
             } elseif ($user->role == 2) {
                 session(['foto' => $user->foto ?: 'assets/img/profile-img.jpg']);
                 session(['level' => 'user']);
                 session(['role' => $user->role]); // Save the role in session
+                session(['idOrganisasiTersimpan' => $user->id_organisasi]);
                 return redirect('/user'); // Redirect to user dashboard
             }
         }

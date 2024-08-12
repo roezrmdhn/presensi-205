@@ -197,9 +197,11 @@
                     <li class="nav-item">
                         <a class="nav-link" href="/organisasi">Organisasi</a>
                     </li>
+                @elseif (session('role') == 0)
                     <li class="nav-item">
                         <a class="nav-link" href="/userdata">Anggota</a>
                     </li>
+                @elseif (session('role') == 1)
                     <li class="nav-item">
                         <a class="nav-link" href="/admindata">Admin/Sekretaris</a>
                     </li>
