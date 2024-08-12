@@ -30,25 +30,25 @@ class AdminController extends Controller
         // Validasi data yang diterima dari form
         $validatedData = $request->validate([
             'name' => 'required|string|max:30',
-            'email' => 'required|string|email|max:50|unique:admin',
+            'email' => 'required|string|email|max:50|unique:users',
             'password' => 'required|string',
             'jabatan' => 'required|string|max:20',
             'departemen' => 'required',
             'address' => 'required|string|max:80',
-            'phone' => 'required|string|max:13 |unique:admin',
-            'more' => 'required|string|max:50',
+            'phone' => 'required|string|max:13 |unique:users',
+            'more' => 'nullable',
             // 'role' => 0,
 
         ]);
 
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:30',
-            'email' => 'required|string|email|max:50|unique:anggota',
+            'email' => 'required|string|email|max:50|unique:users',
             'password' => 'required',
             'jabatan' => 'required|string|max:20',
             'departemen' => 'required',
             'address' => 'required|string|max:80',
-            'phone' => 'required|string|max:13|unique:anggota',
+            'phone' => 'required|string|max:13|unique:users',
         ]);
 
         if ($validator->fails()) {
@@ -90,7 +90,7 @@ class AdminController extends Controller
             'email' => 'required|string|email|max:50',
             'address' => 'required|string|max:80',
             'phone' => 'required|string|max:13',
-            'more' => 'required|string|max:50',
+            'more' => 'nullable',
             'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Jika ingin membatasi ukuran gambar
             // 'role' => 0,
         ]);

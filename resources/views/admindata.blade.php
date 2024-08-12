@@ -528,7 +528,7 @@
                         </div>
                         <div class="col-12">
                             <label for="yourMore" class="form-label">Lainya</label>
-                            <input type="text" name="more" class="form-control" id="yourmore" required>
+                            <input type="text" name="more" class="form-control" id="yourmore">
                             <div class="invalid-feedback">Please enter more!</div>
                         </div>
                         {{-- <div class="col-12">
