@@ -295,10 +295,14 @@
                                                             </div>
                                                             <div
                                                                 class="col-lg-9 d-flex justify-content-center align-items-center">
-                                                                <input type="number" class="form-control"
+                                                                @php
+                                                                    $organisasi = \App\Models\Organisasi::find(
+                                                                        session('idOrganisasiTersimpan'),
+                                                                    );
+                                                                @endphp
+                                                                <input type="text" class="form-control"
                                                                     name="organisasi_id"
-                                                                    value="{{ session('idOrganisasiTersimpan') }}"
-                                                                    disabled>
+                                                                    value="{{ $organisasi->nama }}" readonly>
                                                             </div>
                                                         </div>
                                                     </div>
