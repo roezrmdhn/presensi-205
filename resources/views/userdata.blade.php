@@ -282,8 +282,8 @@
 
                                         <tbody>
                                             @foreach ($users as $data)
-                                                @if ($data->role == 0)
-                                                    @if ($data->id_organisasi == session('idOrganisasiTersimpan'))
+                                                @if (session('role') == 0)
+                                                    @if ($data->role == 2 && $data->id_organisasi == session('idOrganisasiTersimpan'))
                                                         <tr>
                                                             <td>{{ $data->name }}</td>
                                                             <td>{{ $data->email }}</td>
@@ -452,7 +452,7 @@
                                                 @endif
                                             @endforeach
                                             @foreach ($users as $data)
-                                                @if ($data->role == 2)
+                                                @if (session('role') == 1)
                                                     <tr>
                                                         <td>{{ $data->name }}</td>
                                                         <td>{{ $data->email }}</td>
