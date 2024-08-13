@@ -377,7 +377,7 @@
                                                 <th data-type="date" data-format="DD/MM/YYYY">Waktu Selesai</th>
                                                 <th>Deskripsi</th>
                                                 <th>Departemen</th>
-                                                <th>Aksi</th>
+                                                {{-- <th>Aksi</th> --}}
                                             </tr>
                                         </thead>
 

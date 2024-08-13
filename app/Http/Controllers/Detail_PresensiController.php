@@ -151,7 +151,7 @@ class Detail_PresensiController extends Controller
         $anggota = Users::find($userId);
 
         // Dapatkan id organisasi berdasarkan nama departemen anggota
-        $organisasi = Organisasi::where('nama', $anggota->departemen)->first();
+        $organisasi = Organisasi::where('id_organisasi', $anggota->id_organisasi)->first();
 
         // Pastikan id_organisasi yang diizinkan sesuai
         if ($presensi->id_organisasi != 0 && $presensi->id_organisasi != $organisasi->id_organisasi) {
