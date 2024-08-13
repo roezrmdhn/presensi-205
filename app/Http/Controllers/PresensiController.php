@@ -256,7 +256,6 @@ class PresensiController extends Controller
         $selesaiPercentage = $totalPresensi > 0 ? ($selesaiCount / $totalPresensi) * 100 : 0;
 
         $presensiData = Presensi::join('organisasi', 'presensi.id_organisasi', '=', 'organisasi.id_organisasi')
-            ->where('presensi.id_users', $adminId)
             ->where('status', 'Selesai')
             ->orderBy('presensi.id_presensi', 'desc')
             ->select('presensi.*', 'organisasi.nama as nama_organisasi')

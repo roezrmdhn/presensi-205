@@ -323,6 +323,16 @@
                                                             </div>
                                                         </div>
                                                     </div>
+                                                    @php
+                                                        $eventNames = \App\Models\Presensi::where(
+                                                            'id_organisasi',
+                                                            session('idOrganisasiTersimpan'),
+                                                        )
+                                                            ->select('event_name')
+                                                            ->distinct()
+                                                            ->get();
+                                                    @endphp
+
                                                     <div class="container mb-4"
                                                         style="border-radius: 5px; width: 70%; background-color: rgb(249, 250, 251); box-shadow: 0px 2px 20px rgba(3, 41, 112, 0.1);">
                                                         <div class="row">
@@ -336,8 +346,7 @@
                                                                 <select class="form-select" id="event-name"
                                                                     name="event_name">
                                                                     <option selected value="" disabled>Pilih
-                                                                        Kegiatan
-                                                                    </option>
+                                                                        Kegiatan</option>
                                                                     @if ($eventNames && $eventNames->isNotEmpty())
                                                                         @foreach ($eventNames as $event)
                                                                             <option value="{{ $event->event_name }}">
@@ -347,8 +356,8 @@
                                                                         <option value="" disabled>Event tidak
                                                                             tersedia</option>
                                                                     @endif
-
                                                                 </select>
+
                                                             </div>
                                                         </div>
                                                     </div>
